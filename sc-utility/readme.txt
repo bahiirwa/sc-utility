@@ -4,16 +4,18 @@ https://simplycomputing.com.au
 mail@simplycomputing.com.au
 Written by Alan Coggins
 Jan 2019
-Version 1.0
+Version 1.1
 
 
 This is a small plugin designed to be used on websites managed by Simply Computing.
 
-The utility panel has six sections:
+Important Note: The plugin becomes locked to the user who initially activates it. Once locked to one admin user, no other user will see the link in the side menu. To avoid any other user resetting this, it is advisable to use the utility to hide the 'Plugins' link after activation.
+
+The utility panel has five sections for settings:
 
 1. Dashboard widget information
 
-These fields are used to add a dasboard widget giving the client the support details for contacting the website developers. The final checkbox is used to enable the widget.
+These fields are used to add a dashboard widget that gives the client the support details for contacting the website developers. The final checkbox is used to enable the widget.
 
 2. Simplify admin area side menu
 
@@ -31,6 +33,14 @@ These checkboxes remove meta panels from the pages and posts areas.
 
 A few more options to hide unnecessary widgets on the main dashboard, and menu items in the top admin bar.
 
-6. Security
 
-Enter your admin username in this field to give yourself exclusive access to this utility. Other admin users will not see any link on the side menu. Caution: If you enter the wrong username you will be locked out!
+Changelog:
+
+------------
+Version 1.1 
+Changed the security method to lock usage to the admin user who activates the plugin.
+Changed function names to make them unique and avoid conflicts.
+
+------------
+Version 1.0 
+Initial release.

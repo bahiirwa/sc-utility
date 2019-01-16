@@ -30,6 +30,36 @@ License: GPLv2
 
   defined( 'ABSPATH' ) or die( 'No direct access allowed!' );
 
+    register_activation_hook( __FILE__, 'sc_utility_initialise' );
+
+    function sc_utility_initialise() {
+
+        $current_user = wp_get_current_user();
+
+        update_option( 'sc_admin_user', $current_user->user_login );
+
+        set_transient( 'sc-admin-notice', true, 5 );
+
+    }
+
+    add_action( 'admin_notices', 'sc_admin_notice' );
+
+    function sc_admin_notice() {
+
+    /* Check transient, if available display notice */
+    if( get_transient( 'sc-admin-notice' ) ){
+        ?>
+        <div class="updated notice is-dismissible">
+            <p><strong>This plugin is now locked to admin user: <?php echo get_option('sc_admin_user') ?></strong>.</p>
+            <p>Only <?php echo get_option('sc_admin_user') ?> will be able to see the link on the side menu.</p>
+        </div>
+        <?php
+        /* Delete transient, only display this notice once. */
+        delete_transient( 'sc-admin-notice' );
+        }
+    }
+
+
   class MySettingsPage {
 
     /**
@@ -57,21 +87,16 @@ License: GPLv2
 
         $current_user = wp_get_current_user();
 
-        $options = get_option('utility_settings');
+        $admin_user = get_option('sc_admin_user');
 
-        if ($options['security'] == '') {
+        // If you get locked out, comment out this 'if' statement to remove the admin security check
 
-            add_menu_page('Settings Admin', 'SC Utility', 'manage_options', 'sc-utility-settings', array( $this, 'create_admin_page' ));
+        if ($current_user->user_login === $admin_user) {
 
-        } else {
-
-            if ($current_user->user_login === $options['security']) {
-
-            add_menu_page('Settings Admin', 'SC Utility', 'manage_options', 'sc-utility-settings', array( $this, 'create_admin_page' ));
-
-            }
+            add_menu_page('Settings Admin', 'SC Utility', 'manage_options', 'sc-utility-settings', array( $this, 'create_admin_page' ), 'dashicons-admin-tools');
 
         }
+        
     }
 
     /**
@@ -86,6 +111,7 @@ License: GPLv2
 
         <div class="wrap">
             <h1>Simply Computing Utility</h1>
+            <h4>This page is only available to admin user: <?php echo get_option('sc_admin_user') ?>.</h4>
             <style>
                 .form-table th {padding: 10px 10px 0px 10px;}
                 .form-table td {padding: 5px 10px 5px 10px;}
@@ -120,92 +146,84 @@ License: GPLv2
 
         add_settings_section('dashboard_widget', 'Dashboard widget information', '', 'sc-utility-settings');  
 
-        add_settings_field('email', 'Email address:', array( $this, 'email_callback' ), 'sc-utility-settings', 'dashboard_widget' );      
+        add_settings_field('email', 'Email address:', array( $this, 'sc_email_callback' ), 'sc-utility-settings', 'dashboard_widget' );      
 
-        add_settings_field('title', 'Title:', array( $this, 'title_callback' ), 'sc-utility-settings', 'dashboard_widget');   
+        add_settings_field('title', 'Title:', array( $this, 'sc_title_callback' ), 'sc-utility-settings', 'dashboard_widget');   
 
-        add_settings_field('phone', 'Phone number:', array( $this, 'phone_callback' ), 'sc-utility-settings', 'dashboard_widget'); 
+        add_settings_field('phone', 'Phone number:', array( $this, 'sc_phone_callback' ), 'sc-utility-settings', 'dashboard_widget'); 
 
-        add_settings_field('image', 'Path to logo image:', array( $this, 'image_callback' ), 'sc-utility-settings', 'dashboard_widget');
+        add_settings_field('image', 'Path to logo image:', array( $this, 'sc_image_callback' ), 'sc-utility-settings', 'dashboard_widget');
 
-        add_settings_field('enable_widget', 'Enable support widget:', array( $this, 'enable_widget_callback' ), 'sc-utility-settings', 'dashboard_widget');         
+        add_settings_field('enable_widget', 'Enable support widget:', array( $this, 'sc_enable_widget_callback' ), 'sc-utility-settings', 'dashboard_widget');         
 
         
         // Add section for settings to simplify admin side menu
 
         add_settings_section('setting_section_id', 'Simplify admin area side menu', array( $this, 'print_section_info' ), 'sc-utility-settings'); 
 
-        add_settings_field('posts', 'Hide posts:', array( $this, 'posts_callback' ), 'sc-utility-settings', 'setting_section_id');  
+        add_settings_field('posts', 'Hide posts:', array( $this, 'sc_posts_callback' ), 'sc-utility-settings', 'setting_section_id');  
 
-        add_settings_field('media', 'Hide media:', array( $this, 'media_callback' ), 'sc-utility-settings', 'setting_section_id'); 
+        add_settings_field('media', 'Hide media:', array( $this, 'sc_media_callback' ), 'sc-utility-settings', 'setting_section_id'); 
 
-        add_settings_field('links', 'Hide links:', array( $this, 'links_callback' ), 'sc-utility-settings', 'setting_section_id');  
+        add_settings_field('links', 'Hide links:', array( $this, 'sc_links_callback' ), 'sc-utility-settings', 'setting_section_id');  
 
-        add_settings_field('pages', 'Hide pages:', array( $this, 'pages_callback' ), 'sc-utility-settings', 'setting_section_id');  
+        add_settings_field('pages', 'Hide pages:', array( $this, 'sc_pages_callback' ), 'sc-utility-settings', 'setting_section_id');  
 
-        add_settings_field('comments', 'Hide comments:', array( $this, 'comments_callback' ), 'sc-utility-settings', 'setting_section_id');         
+        add_settings_field('comments', 'Hide comments:', array( $this, 'sc_comments_callback' ), 'sc-utility-settings', 'setting_section_id');         
 
-        add_settings_field('appearance', 'Hide appearance:', array( $this, 'appearance_callback' ), 'sc-utility-settings', 'setting_section_id'); 
+        add_settings_field('appearance', 'Hide appearance:', array( $this, 'sc_appearance_callback' ), 'sc-utility-settings', 'setting_section_id'); 
 
-        add_settings_field('plugins', 'Hide plugins:', array( $this, 'plugins_callback' ), 'sc-utility-settings', 'setting_section_id');  
+        add_settings_field('plugins', 'Hide plugins:', array( $this, 'sc_plugins_callback' ), 'sc-utility-settings', 'setting_section_id');  
 
-        add_settings_field('users', 'Hide users:', array( $this, 'users_callback' ), 'sc-utility-settings', 'setting_section_id');          
+        add_settings_field('users', 'Hide users:', array( $this, 'sc_users_callback' ), 'sc-utility-settings', 'setting_section_id');          
 
-        add_settings_field('tools', 'Hide tools:', array($this, 'tools_callback' ), 'sc-utility-settings', 'setting_section_id');      
+        add_settings_field('tools', 'Hide tools:', array($this, 'sc_tools_callback' ), 'sc-utility-settings', 'setting_section_id');      
 
-        add_settings_field('settings', 'Hide settings:', array($this, 'settings_callback' ), 'sc-utility-settings', 'setting_section_id');
+        add_settings_field('settings', 'Hide settings:', array($this, 'sc_settings_callback' ), 'sc-utility-settings', 'setting_section_id');
 
 
         // Add section to for including back some useful selected menu items from sub menus
 
         add_settings_section('add_item', 'Add individual menu items from the submenus', '', 'sc-utility-settings' );  
 
-        add_settings_field('add_widgets', 'Add a widgets link:', array( $this, 'add_widgets_callback' ), 'sc-utility-settings', 'add_item'); 
+        add_settings_field('add_widgets', 'Add a widgets link:', array( $this, 'sc_add_widgets_callback' ), 'sc-utility-settings', 'add_item'); 
 
-        add_settings_field('add_menus', 'Add a menus link:', array( $this, 'add_menus_callback' ), 'sc-utility-settings', 'add_item');
+        add_settings_field('add_menus', 'Add a menus link:', array( $this, 'sc_add_menus_callback' ), 'sc-utility-settings', 'add_item');
 
 
         // Add section for settings to simplify pages and posts 
 
         add_settings_section('setting_section_id2', 'Simplify pages and posts', '', 'sc-utility-settings'); 
 
-        add_settings_field('attributes', 'Hide page attributes:', array( $this, 'attributes_callback' ), 'sc-utility-settings', 'setting_section_id2');
+        add_settings_field('attributes', 'Hide page attributes:', array( $this, 'sc_attributes_callback' ), 'sc-utility-settings', 'setting_section_id2');
 
-         add_settings_field('categories', 'Hide categories:', array( $this, 'categories_callback' ), 'sc-utility-settings', 'setting_section_id2'); 
+         add_settings_field('categories', 'Hide categories:', array( $this, 'sc_categories_callback' ), 'sc-utility-settings', 'setting_section_id2'); 
 
-        add_settings_field('custom_fields', 'Hide custom fields:', array( $this, 'custom_fields_callback' ), 'sc-utility-settings', 'setting_section_id2');  
+        add_settings_field('custom_fields', 'Hide custom fields:', array( $this, 'sc_custom_fields_callback' ), 'sc-utility-settings', 'setting_section_id2');  
 
-        add_settings_field('discussion', 'Hide discussion:', array( $this, 'discussion_callback' ), 'sc-utility-settings', 'setting_section_id2');          
+        add_settings_field('discussion', 'Hide discussion:', array( $this, 'sc_discussion_callback' ), 'sc-utility-settings', 'setting_section_id2');          
 
-        add_settings_field('slug', 'Hide slug:', array( $this, 'slug_callback' ), 'sc-utility-settings', 'setting_section_id2'); 
+        add_settings_field('slug', 'Hide slug:', array( $this, 'sc_slug_callback' ), 'sc-utility-settings', 'setting_section_id2'); 
 
-        add_settings_field('tags', 'Hide tags:', array( $this, 'tags_callback' ), 'sc-utility-settings', 'setting_section_id2');  
+        add_settings_field('tags', 'Hide tags:', array( $this, 'sc_tags_callback' ), 'sc-utility-settings', 'setting_section_id2');  
 
-        add_settings_field('excerpts', 'Hide excerpts:', array( $this, 'excerpts_callback' ), 'sc-utility-settings', 'setting_section_id2');          
+        add_settings_field('excerpts', 'Hide excerpts:', array( $this, 'sc_excerpts_callback' ), 'sc-utility-settings', 'setting_section_id2');          
 
-        add_settings_field('trackbacks', 'Hide trackbacks:', array( $this, 'trackbacks_callback' ), 'sc-utility-settings', 'setting_section_id2');
+        add_settings_field('trackbacks', 'Hide trackbacks:', array( $this, 'sc_trackbacks_callback' ), 'sc-utility-settings', 'setting_section_id2');
 
-        add_settings_field('revisions', 'Hide revisions:', array( $this, 'revisions_callback' ), 'sc-utility-settings', 'setting_section_id2');
+        add_settings_field('revisions', 'Hide revisions:', array( $this, 'sc_revisions_callback' ), 'sc-utility-settings', 'setting_section_id2');
 
-        add_settings_field('authors', 'Hide authors:', array( $this, 'authors_callback' ), 'sc-utility-settings', 'setting_section_id2');
+        add_settings_field('authors', 'Hide authors:', array( $this, 'sc_authors_callback' ), 'sc-utility-settings', 'setting_section_id2');
 
-        add_settings_field('format', 'Hide format:', array( $this, 'format_callback' ), 'sc-utility-settings', 'setting_section_id2');
+        add_settings_field('format', 'Hide format:', array( $this, 'sc_format_callback' ), 'sc-utility-settings', 'setting_section_id2');
 
         // Add section for other miscellaneous actions
 
         add_settings_section('miscellaneous', 'Simplify other areas', '', 'sc-utility-settings' );  
 
-        add_settings_field('dashboard_widgets', 'Hide dashboard widgets:', array( $this, 'dashboard_widgets_callback' ), 'sc-utility-settings', 'miscellaneous'); 
+        add_settings_field('dashboard_widgets', 'Hide dashboard widgets:', array( $this, 'sc_dashboard_widgets_callback' ), 'sc-utility-settings', 'miscellaneous'); 
 
-        add_settings_field('top_admin', 'Hide top admin bar options:', array( $this, 'top_admin_callback' ), 'sc-utility-settings', 'miscellaneous');
-
- 
-        // Add section for security setting to restrict access to one admin user
-
-        add_settings_section('security', 'Security', '', 'sc-utility-settings' );  
-
-        add_settings_field('security', 'Lock utility to one admin user:<br/><small>(Careful! You can lock yourself out)</small>',
-         array( $this, 'security_callback' ), 'sc-utility-settings', 'security');        
+        add_settings_field('top_admin', 'Hide top admin bar options:', array( $this, 'sc_top_admin_callback' ), 'sc-utility-settings', 'miscellaneous');
 
     }
 
@@ -309,9 +327,6 @@ License: GPLv2
         if( isset( $input['top_admin'] ) )
             $new_input['top_admin'] = sanitize_text_field( $input['top_admin'] );
 
-        if( isset( $input['security'] ) )
-            $new_input['security'] = sanitize_text_field( $input['security'] ); 
-
         return $new_input;
 
     }
@@ -320,70 +335,70 @@ License: GPLv2
      * Get the settings option array and print values
      */
 
-    public function email_callback() {
+    public function sc_email_callback() {
         printf(
             '<input type="text" id="email" name="utility_settings[email]" value="%s" size="40" />',
             isset( $this->options['email'] ) ? esc_attr( $this->options['email']) : ''
         );
     }
 
-    public function title_callback() {
+    public function sc_title_callback() {
         printf(
             '<input type="text" id="title" name="utility_settings[title]" value="%s" />',
             isset( $this->options['title'] ) ? esc_attr( $this->options['title']) : ''
         );
     }
 
-    public function phone_callback() {
+    public function sc_phone_callback() {
         printf(
             '<input type="text" id="phone" name="utility_settings[phone]" value="%s" />',
             isset( $this->options['phone'] ) ? esc_attr( $this->options['phone']) : ''
         );
     }
 
-    public function image_callback() {
+    public function sc_image_callback() {
         printf(
             '<input type="text" id="image" name="utility_settings[image]" value="%s" />',
             isset( $this->options['image'] ) ? esc_attr( $this->options['image']) : ''
         );
     }
 
-    public function enable_widget_callback() {
+    public function sc_enable_widget_callback() {
         $options = get_option( 'utility_settings' );    
         if( !isset( $options['enable_widget'] ) ) $options['enable_widget'] = 0;
         $html = '<input type="checkbox" id="enable_widget" name="utility_settings[enable_widget]" value="1"' . checked( 1, $options['enable_widget'], false ) . '/>';
         echo $html;
     }    
 
-    public function posts_callback() {
+    public function sc_posts_callback() {
         $options = get_option( 'utility_settings' );    
         if( !isset( $options['posts'] ) ) $options['posts'] = 0;
         $html = '<input type="checkbox" id="posts" name="utility_settings[posts]" value="1"' . checked( 1, $options['posts'], false ) . '/>';
         echo $html;
     }
 
-    public function media_callback() {
+    public function sc_media_callback() {
         $options = get_option( 'utility_settings' );    
         if( !isset( $options['media'] ) ) $options['media'] = 0;
         $html = '<input type="checkbox" id="media" name="utility_settings[media]" value="1"' . checked( 1, $options['media'], false ) . '/>';
         echo $html;
     }    
 
-    public function links_callback() {
+    public function sc_links_callback() {
         $options = get_option( 'utility_settings' );    
         if( !isset( $options['links'] ) ) $options['links'] = 0;
         $html = '<input type="checkbox" id="links" name="utility_settings[links]" value="1"' . checked( 1, $options['links'], false ) . '/>';
         echo $html;
     }
 
-    public function pages_callback() {
+    public function sc_pages_callback() {
         $options = get_option( 'utility_settings' );    
         if( !isset( $options['pages'] ) ) $options['pages'] = 0;
         $html = '<input type="checkbox" id="pages" name="utility_settings[pages]" value="1"' . checked( 1, $options['pages'], false ) . '/>';
         echo $html;
     }
 
-    public function comments_callback() {
+    public function sc_comments_callback() {
         $options = get_option( 'utility_settings' );    
         if( !isset( $options['comments'] ) ) $options['comments'] = 0;
         $html = '<input type="checkbox" id="comments" name="utility_settings[comments]" value="1"' . checked( 1, $options['comments'], false ) . '/>';
@@ -391,152 +406,146 @@ License: GPLv2
     }
 
 
-    public function appearance_callback() {
+    public function sc_appearance_callback() {
         $options = get_option( 'utility_settings' );    
         if( !isset( $options['appearance'] ) ) $options['appearance'] = 0;
         $html = '<input type="checkbox" id="appearance" name="utility_settings[appearance]" value="1"' . checked( 1, $options['appearance'], false ) . '/>';
         echo $html;
     }
 
-    public function plugins_callback() {
+    public function sc_plugins_callback() {
         $options = get_option( 'utility_settings' );    
         if( !isset( $options['plugins'] ) ) $options['plugins'] = 0;
         $html = '<input type="checkbox" id="plugins" name="utility_settings[plugins]" value="1"' . checked( 1, $options['plugins'], false ) . '/>';
         echo $html;
     }
 
-    public function users_callback() {
+    public function sc_users_callback() {
         $options = get_option( 'utility_settings' );    
         if( !isset( $options['users'] ) ) $options['users'] = 0;
         $html = '<input type="checkbox" id="users" name="utility_settings[users]" value="1"' . checked( 1, $options['users'], false ) . '/>';
         echo $html;
     }    
 
-    public function tools_callback() {
+    public function sc_tools_callback() {
         $options = get_option( 'utility_settings' );    
         if( !isset( $options['tools'] ) ) $options['tools'] = 0;
         $html = '<input type="checkbox" id="tools" name="utility_settings[tools]" value="1"' . checked( 1, $options['tools'], false ) . '/>';
         echo $html;
     }    
 
-    public function settings_callback() {
+    public function sc_settings_callback() {
         $options = get_option( 'utility_settings' );    
         if( !isset( $options['settings'] ) ) $options['settings'] = 0;
         $html = '<input type="checkbox" id="settings" name="utility_settings[settings]" value="1"' . checked( 1, $options['settings'], false ) . '/>';
         echo $html;
     }    
 
-    public function add_widgets_callback() {
+    public function sc_add_widgets_callback() {
         $options = get_option( 'utility_settings' );    
         if( !isset( $options['add_widgets'] ) ) $options['add_widgets'] = 0;
         $html = '<input type="checkbox" id="add_widgets" name="utility_settings[add_widgets]" value="1"' . checked( 1, $options['add_widgets'], false ) . '/>';
         echo $html;
     }     
 
-    public function add_menus_callback() {
+    public function sc_add_menus_callback() {
         $options = get_option( 'utility_settings' );    
         if( !isset( $options['add_menus'] ) ) $options['add_menus'] = 0;
         $html = '<input type="checkbox" id="add_menus" name="utility_settings[add_menus]" value="1"' . checked( 1, $options['add_menus'], false ) . '/>';
         echo $html;
     } 
     
-    function attributes_callback() {
+    public function sc_attributes_callback() {
         $options = get_option( 'utility_settings' );    
         if( !isset( $options['attributes'] ) ) $options['attributes'] = 0;
         $html = '<input type="checkbox" id="attributes" name="utility_settings[attributes]" value="1"' . checked( 1, $options['attributes'], false ) . '/>';
         echo $html;
     }    
 
-    public function categories_callback() {
+    public function sc_categories_callback() {
         $options = get_option( 'utility_settings' );    
         if( !isset( $options['categories'] ) ) $options['categories'] = 0;
         $html = '<input type="checkbox" id="categories" name="utility_settings[categories]" value="1"' . checked( 1, $options['categories'], false ) . '/>';
         echo $html;
     }  
 
-    public function custom_fields_callback() {
+    public function sc_custom_fields_callback() {
         $options = get_option( 'utility_settings' );    
         if( !isset( $options['custom_fields'] ) ) $options['custom_fields'] = 0;
         $html = '<input type="checkbox" id="custom_fields" name="utility_settings[custom_fields]" value="1"' . checked( 1, $options['custom_fields'], false ) . '/>';
         echo $html;
     }    
 
-    public function discussion_callback() {
+    public function sc_discussion_callback() {
         $options = get_option( 'utility_settings' );    
         if( !isset( $options['discussion'] ) ) $options['discussion'] = 0;
         $html = '<input type="checkbox" id="discussion" name="utility_settings[discussion]" value="1"' . checked( 1, $options['discussion'], false ) . '/>';
         echo $html;
     }    
 
-    public function slug_callback() {
+    public function sc_slug_callback() {
         $options = get_option( 'utility_settings' );    
         if( !isset( $options['slug'] ) ) $options['slug'] = 0;
         $html = '<input type="checkbox" id="slug" name="utility_settings[slug]" value="1"' . checked( 1, $options['slug'], false ) . '/>';
         echo $html;
     }  
 
-    public function tags_callback() {
+    public function sc_tags_callback() {
         $options = get_option( 'utility_settings' );    
         if( !isset( $options['tags'] ) ) $options['tags'] = 0;
         $html = '<input type="checkbox" id="tags" name="utility_settings[tags]" value="1"' . checked( 1, $options['tags'], false ) . '/>';
         echo $html;
     }    
 
-    public function excerpts_callback() {
+    public function sc_excerpts_callback() {
         $options = get_option( 'utility_settings' );    
         if( !isset( $options['excerpts'] ) ) $options['excerpts'] = 0;
         $html = '<input type="checkbox" id="excerpts" name="utility_settings[excerpts]" value="1"' . checked( 1, $options['excerpts'], false ) . '/>';
         echo $html;
     }    
 
-    public function trackbacks_callback() {
+    public function sc_trackbacks_callback() {
         $options = get_option( 'utility_settings' );    
         if( !isset( $options['trackbacks'] ) ) $options['trackbacks'] = 0;
         $html = '<input type="checkbox" id="trackbacks" name="utility_settings[trackbacks]" value="1"' . checked( 1, $options['trackbacks'], false ) . '/>';
         echo $html;
     } 
 
-    public function revisions_callback() {
+    public function sc_revisions_callback() {
         $options = get_option( 'utility_settings' );    
         if( !isset( $options['revisions'] ) ) $options['revisions'] = 0;
         $html = '<input type="checkbox" id="revisions" name="utility_settings[revisions]" value="1"' . checked( 1, $options['revisions'], false ) . '/>';
         echo $html;
     }     
 
-    public function authors_callback() {
+    public function sc_authors_callback() {
         $options = get_option( 'utility_settings' );    
         if( !isset( $options['authors'] ) ) $options['authors'] = 0;
         $html = '<input type="checkbox" id="authors" name="utility_settings[authors]" value="1"' . checked( 1, $options['authors'], false ) . '/>';
         echo $html;
     }
 
-    public function format_callback() {
+    public function sc_format_callback() {
         $options = get_option( 'utility_settings' );    
         if( !isset( $options['format'] ) ) $options['format'] = 0;
         $html = '<input type="checkbox" id="format" name="utility_settings[format]" value="1"' . checked( 1, $options['format'], false ) . '/>';
         echo $html;
     }
 
-    public function dashboard_widgets_callback() {
+    public function sc_dashboard_widgets_callback() {
         $options = get_option( 'utility_settings' );    
         if( !isset( $options['dashboard_widgets'] ) ) $options['dashboard_widgets'] = 0;
         $html = '<input type="checkbox" id="dashboard_widgets" name="utility_settings[dashboard_widgets]" value="1"' . checked( 1, $options['dashboard_widgets'], false ) . '/>';
         echo $html;
     }     
 
-    public function top_admin_callback() {
+    public function sc_top_admin_callback() {
         $options = get_option( 'utility_settings' );    
         if( !isset( $options['top_admin'] ) ) $options['top_admin'] = 0;
         $html = '<input type="checkbox" id="top_admin" name="utility_settings[top_admin]" value="1"' . checked( 1, $options['top_admin'], false ) . '/>';
         echo $html;
     } 
-
-    public function security_callback() {
-        printf(
-            '<input type="text" id="security" name="utility_settings[security]" value="%s" />',
-            isset( $this->options['security'] ) ? esc_attr( $this->options['security']) : ''
-        );
-    }    
+    
 }
 
    if( is_admin() )
@@ -547,24 +556,22 @@ License: GPLv2
  * Add a custom widget on the admin dashboard area giving contact details for support.
  */
 
-    add_action('wp_dashboard_setup', 'custom_dashboard_widget');
+    add_action('wp_dashboard_setup', 'sc_custom_dashboard_widget');
    
-    function custom_dashboard_widget() {
+    function sc_custom_dashboard_widget() {
 
     global $wp_meta_boxes;
 
     $options = get_option('utility_settings');
 
     if (isset($options['enable_widget']) == 1)
-        wp_add_dashboard_widget('custom_help_widget', $options['title'] . ' Support', 'custom_dashboard_support');
+        wp_add_dashboard_widget('custom_help_widget', $options['title'] . ' Support', 'sc_custom_dashboard_support');
 
   }
    
-  function custom_dashboard_support() {
+  function sc_custom_dashboard_support() {
 
     $options = get_option('utility_settings');
-
-    $current_user = wp_get_current_user();
 
     echo '<p><img src="' . $options['image'] . '" style="width:80px;" /></p><p><b>Need help?</b>
    Contact the developers at ' . $options['title'] . ' by <a href="mailto:' . $options['email'] . '" target=_blank"><u>email</u></a> 
@@ -577,9 +584,9 @@ License: GPLv2
  * Remove items from admin menu.
  */  
 
-    add_action('admin_menu', 'remove_admin_menus');
+    add_action('admin_menu', 'sc_remove_admin_menus');
 
-    function remove_admin_menus() {
+    function sc_remove_admin_menus() {
 
         $options = get_option('utility_settings');
 
@@ -611,9 +618,9 @@ License: GPLv2
  * Remove items from post and pages.
  */  
 
-    add_action('admin_init', 'remove_boxes');
+    add_action('admin_init', 'sc_remove_boxes');
 
-    function remove_boxes() {
+    function sc_remove_boxes() {
 
     $options = get_option('utility_settings');
 
@@ -668,9 +675,9 @@ License: GPLv2
  * Disable most of the main dashboard widgets.
  */    
 
-    add_action('admin_menu', 'disable_dashboard_widgets');
+    add_action('admin_menu', 'sc_disable_dashboard_widgets');
 
-    function disable_dashboard_widgets() {
+    function sc_disable_dashboard_widgets() {
 
         $options = get_option('utility_settings');
 
@@ -695,9 +702,9 @@ License: GPLv2
  * Remove links from top admin bar.
  */
 
-    add_action('admin_bar_menu', 'remove_toolbar_nodes', 999);
+    add_action('admin_bar_menu', 'sc_remove_toolbar_nodes', 999);
 
-    function remove_toolbar_nodes($wp_admin_bar) {
+    function sc_remove_toolbar_nodes($wp_admin_bar) {
 
         global $wp_admin_bar;
 
@@ -718,9 +725,9 @@ License: GPLv2
  * Add 'widgets' link to side admin menu.
  */
 
-    add_action('admin_menu', 'add_widgets_item');
+    add_action('admin_menu', 'sc_add_widgets_item');
 
-    function add_widgets_item() {
+    function sc_add_widgets_item() {
 
         $options = get_option('utility_settings');
 
@@ -734,9 +741,9 @@ License: GPLv2
  * Add 'menus' link to side admin menu.
  */
 
-    add_action('admin_menu', 'add_menus_item');
+    add_action('admin_menu', 'sc_add_menus_item');
 
-    function add_menus_item() {
+    function sc_add_menus_item() {
 
         $options = get_option('utility_settings');
 
