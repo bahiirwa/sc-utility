@@ -4,9 +4,13 @@ Simply Computing utility plugin for ClassicPress sites
 Simply Computing Utility
 
 https://simplycomputing.com.au
+
 mail@simplycomputing.com.au
+
 Written by Alan Coggins
+
 Jan 2019
+
 Version 1.1
 
 

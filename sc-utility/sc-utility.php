@@ -28,7 +28,11 @@ License: GPLv2
 */
 
 
-  defined( 'ABSPATH' ) or die( 'No direct access allowed!' );
+    defined( 'ABSPATH' ) or die( 'No direct access allowed!' );
+
+    /* Include plugin updater. */
+
+    require_once( trailingslashit( plugin_dir_path( __FILE__ ) ) . 'includes/updater.php' );
 
     register_activation_hook( __FILE__, 'sc_utility_initialise' );
 
