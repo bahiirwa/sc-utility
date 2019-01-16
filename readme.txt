@@ -1,14 +1,9 @@
-# sc-utility
-Simply Computing utility plugin for ClassicPress sites
+Simply Computing Utility
 
 https://simplycomputing.com.au
-
 mail@simplycomputing.com.au
-
 Written by Alan Coggins
-
 Jan 2019
-
 Version 1.0.1
 
 
@@ -42,18 +37,11 @@ A few more options to hide unnecessary widgets on the main dashboard, and menu i
 Changelog:
 
 ------------
-
 Version 1.0.1 
-
 Changed the security method to lock usage to the admin user who activates the plugin.
-
 Changed function names to make them unique and avoid conflicts.
-
 Added updater file.
 
-
 ------------
-
-Version 1.0.0 
-
+Version 1.0.0
 Initial release.
