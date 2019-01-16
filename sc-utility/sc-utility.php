@@ -3,7 +3,7 @@
 Plugin Name: SC Utility
 Plugin URI: https://github.com/ozfiddler/sc-utility
 Description: Add dashboard support widget, simplify the user interface
-Version: 1.1
+Version: 1.0.1
 Author: Alan Coggins
 Author URI: http://simplycomputing.com.au
 License: GPLv2

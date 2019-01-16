@@ -11,7 +11,7 @@ Written by Alan Coggins
 
 Jan 2019
 
-Version 1.1
+Version 1.0.1
 
 
 This is a small plugin designed to be used on websites managed by Simply Computing.
@@ -44,10 +44,11 @@ A few more options to hide unnecessary widgets on the main dashboard, and menu i
 Changelog:
 
 ------------
-Version 1.1 
+Version 1.0.1 
 Changed the security method to lock usage to the admin user who activates the plugin.
 Changed function names to make them unique and avoid conflicts.
+Added updater file.
 
 ------------
-Version 1.0 
+Version 1.0.0 
 Initial release.
