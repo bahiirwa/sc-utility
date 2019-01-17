@@ -719,6 +719,10 @@ License: GPLv2
         $wp_admin_bar->remove_menu('updates');
         $wp_admin_bar->remove_menu('comments');
         $wp_admin_bar->remove_menu('new-content'); 
+        $wp_admin_bar->remove_menu('themes'); 
+        $wp_admin_bar->remove_menu('widgets');
+        $wp_admin_bar->remove_menu('menus'); 
+        $wp_admin_bar->remove_menu('customize');  
 
     }      
 
