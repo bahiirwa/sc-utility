@@ -396,7 +396,7 @@ License: GPLv2
         $options = get_option( 'sc_utility_settings' );    
         if( !isset( $options['media'] ) ) $options['media'] = 0;
         $html = '<input type="checkbox" id="media" name="sc_utility_settings[media]" value="1"' . checked( 1, $options['media'], false ) . '/>';
-y
+
         echo $html;
     }    
 
