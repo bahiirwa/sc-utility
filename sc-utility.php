@@ -7,7 +7,7 @@ Description: Add dashboard support widget, simplify the user interface
 Version: 1.0.2
 
 Author: Alan Coggins
-Author URI: http://simplycomputing.com.au
+Author URI: https://simplycomputing.com.au
 License: GPLv2
 */
 
@@ -18,13 +18,14 @@ License: GPLv2
  * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. Full
  * text of the license is available at https://www.gnu.org/licenses/gpl-2.0.txt.
 
-
 */
-
 
     defined('ABSPATH') or die('No direct access allowed!');
 
-    /* Include plugin updater. */
+    /**
+     * Include plugin updater.
+     */
+
 
     require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/updater.php');
 
@@ -44,7 +45,11 @@ License: GPLv2
 
     function sc_admin_notice() {
 
-    /* Check transient, if available display notice */
+    /**
+     * Check transient, if available display notice
+     */
+
+
     if(get_transient('sc-admin-notice')){
         ?>
         <div class="updated notice is-dismissible">
