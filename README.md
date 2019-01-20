@@ -43,6 +43,13 @@ Changelog:
 
 ------------
 
+Version 1.0.2
+
+Added in uninstall.php file to clean up database
+
+
+------------
+
 Version 1.0.1 
 
 Changed the security method to lock usage to the admin user who activates the plugin.

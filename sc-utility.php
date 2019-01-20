@@ -161,7 +161,7 @@ License: GPLv2
         
         // Add section for settings to simplify admin side menu
 
-        add_settings_section('setting_section_id', 'Simplify admin area side menu', array( $this, 'print_section_info' ), 'sc-utility-settings'); 
+        add_settings_section('setting_section_id', 'Simplify admin area side menu', '', 'sc-utility-settings'); 
 
         add_settings_field('posts', 'Hide posts:', array( $this, 'sc_posts_callback' ), 'sc-utility-settings', 'setting_section_id');  
 
