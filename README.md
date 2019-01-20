@@ -9,7 +9,7 @@ Written by Alan Coggins
 
 Jan 2019
 
-Version 1.0.1
+Version 1.0.2
 
 
 This is a small plugin designed to be used on websites managed by Simply Computing.
