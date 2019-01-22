@@ -216,7 +216,7 @@ License: GPLv2
 
         add_settings_field('authors', 'Hide authors:', array($this, 'sc_authors_callback'), 'sc-utility-settings', 'setting_section_id2');
 
-        add_settings_field('format', 'Hide format:', array($this, 'sc_format_callback'), 'sc-utility-settings', 'setting_section_id2');
+        add_settings_field('format', 'Hide formats & layouts:', array($this, 'sc_format_callback'), 'sc-utility-settings', 'setting_section_id2');
 
         // Add section for other miscellaneous actions
 
@@ -693,8 +693,6 @@ License: GPLv2
             remove_meta_box('revisionsdiv', 'page', 'normal'); //Revisions in pages
         if (isset($options['slug']) == 1)
             remove_meta_box('slugdiv', 'page', 'normal'); // Slugs in pages
-        if (isset($options['revisionsdiv_page']) == 1)
-            remove_meta_box('revisionsdiv', 'page', 'normal'); // Revisions in pages
         if (isset($options['authors']) == 1)
             remove_meta_box('authordiv', 'page', 'normal'); // Authors in pages
         if (isset($options['format']) == 1)
@@ -708,8 +706,6 @@ License: GPLv2
             remove_meta_box('categorydiv', 'post', 'normal'); // Categories in posts
         if (isset($options['discussion']) == 1)
             remove_meta_box('commentstatusdiv', 'post', 'normal'); // Discussion in posts
-        if (isset($options['revisionsdiv_post']) == 1)
-            remove_meta_box('revisionsdiv', 'post', 'normal'); // Revisions in posts
         if (isset($options['slug']) == 1)
             remove_meta_box('slugdiv', 'post', 'normal'); // Slugs in posts
         if (isset($options['tags']) == 1)
@@ -725,6 +721,17 @@ License: GPLv2
         if (isset($options['format']) == 1)
             remove_meta_box('formatdiv', 'post', 'normal'); // Format in posts
 
+    }
+
+    function sc_remove_layout_meta_box() {
+
+        $options = get_option('sc_utility_settings');
+
+        if (isset($options['format']) == 1)
+          remove_meta_box('generate_layout_options_meta_box', 'post', 'normal');
+
+        if (isset($options['format']) == 1)
+          remove_meta_box('generate_layout_options_meta_box', 'page', 'normal');
     }
 
 
