@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: SC Utility
-Plugin URI: https://github.com/ozfiddler/sc-utility
+Plugin URI: https://github.com/simplycomputing/sc-utility
 Description: Add dashboard support widget, simplify the user interface
 
 Version: 1.0.2
