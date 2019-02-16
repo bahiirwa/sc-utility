@@ -7,9 +7,9 @@ mail@simplycomputing.com.au
 
 Written by Alan Coggins
 
-Jan 2019
+Feb 2019
 
-Version 1.0.2
+Version 1.0.3
 
 
 This is a small plugin designed to be used on websites managed by Simply Computing.
@@ -40,6 +40,12 @@ A few more options to hide unnecessary widgets on the main dashboard, and menu i
 
 
 Changelog:
+
+------------
+
+Version 1.0.3
+
+Added checkbox to hide Shield Security menu item
 
 ------------
 
