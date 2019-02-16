@@ -4,7 +4,7 @@ Plugin Name: SC Utility
 Plugin URI: https://github.com/simplycomputing/sc-utility
 Description: Add dashboard support widget, simplify the user interface
 
-Version: 1.0.2
+Version: 1.0.3
 
 Author: Alan Coggins
 Author URI: https://simplycomputing.com.au
@@ -182,6 +182,8 @@ License: GPLv2
 
         add_settings_field('settings', 'Hide settings:', array($this, 'sc_settings_callback'), 'sc-utility-settings', 'setting_section_id');
 
+        add_settings_field('shield', 'Hide Shield Security:', array($this, 'sc_shield_callback'), 'sc-utility-settings', 'setting_section_id');
+
 
         // Add section to for including back some useful selected menu items from sub menus
 
@@ -198,7 +200,7 @@ License: GPLv2
 
         add_settings_field('attributes', 'Hide page attributes:', array($this, 'sc_attributes_callback'), 'sc-utility-settings', 'setting_section_id2');
 
-         add_settings_field('categories', 'Hide categories:', array($this, 'sc_categories_callback'), 'sc-utility-settings', 'setting_section_id2');
+        add_settings_field('categories', 'Hide categories:', array($this, 'sc_categories_callback'), 'sc-utility-settings', 'setting_section_id2');
 
         add_settings_field('custom_fields', 'Hide custom fields:', array($this, 'sc_custom_fields_callback'), 'sc-utility-settings', 'setting_section_id2');
 
@@ -282,6 +284,9 @@ License: GPLv2
 
         if(isset($input['settings']))
             $new_input['settings'] = sanitize_text_field($input['settings']);
+
+        if(isset($input['shield']))
+            $new_input['shield'] = sanitize_text_field($input['shield']);        
 
         if(isset($input['add_widgets']))
             $new_input['add_widgets'] = sanitize_text_field($input['add_widgets']);
@@ -464,6 +469,15 @@ License: GPLv2
         $options = get_option('sc_utility_settings');
         if(!isset($options['settings'])) $options['settings'] = 0;
         $html = '<input type="checkbox" id="settings" name="sc_utility_settings[settings]" value="1"' . checked(1, $options['settings'], false) . '/>';
+
+        echo $html;
+    }
+
+    public function sc_shield_callback() {
+
+        $options = get_option('sc_utility_settings');
+        if(!isset($options['shield'])) $options['shield'] = 0;
+        $html = '<input type="checkbox" id="shield" name="sc_utility_settings[shield]" value="1"' . checked(1, $options['shield'], false) . '/>';
 
         echo $html;
     }
@@ -667,8 +681,22 @@ License: GPLv2
             remove_menu_page('users.php'); // Users
         if (isset($options['settings']) == 1)
             remove_menu_page('options-general.php'); // Settings
-
     }
+
+
+ /*
+ * Hide Shield Security.
+ */
+
+    function custom_menu_page_removing() {
+
+        $options = get_option('sc_utility_settings');
+        
+        if (isset($options['shield']) == 1)
+            remove_menu_page( 'icwp-wpsf' );
+    }
+
+    add_action( 'admin_menu', 'custom_menu_page_removing', 999);
 
 
 /*
