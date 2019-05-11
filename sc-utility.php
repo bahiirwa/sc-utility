@@ -4,7 +4,7 @@ Plugin Name: SC Utility
 Plugin URI: https://github.com/simplycomputing/sc-utility
 Description: Add dashboard support widget, simplify the user interface
 
-Version: 1.0.3
+Version: 1.0.4
 
 Author: Alan Coggins
 Author URI: https://simplycomputing.com.au
@@ -719,8 +719,6 @@ License: GPLv2
             remove_meta_box('commentstatusdiv', 'page', 'normal'); // Discussions in pages
         if (isset($options['revisions']) == 1)
             remove_meta_box('revisionsdiv', 'page', 'normal'); //Revisions in pages
-        if (isset($options['slug']) == 1)
-            remove_meta_box('slugdiv', 'page', 'normal'); // Slugs in pages
         if (isset($options['authors']) == 1)
             remove_meta_box('authordiv', 'page', 'normal'); // Authors in pages
         if (isset($options['format']) == 1)
@@ -735,7 +733,7 @@ License: GPLv2
         if (isset($options['discussion']) == 1)
             remove_meta_box('commentstatusdiv', 'post', 'normal'); // Discussion in posts
         if (isset($options['slug']) == 1)
-            remove_meta_box('slugdiv', 'post', 'normal'); // Slugs in posts
+            add_action( 'admin_head', 'hide_all_slugs'  ); // Slugs in posts and pages
         if (isset($options['tags']) == 1)
             remove_meta_box('tagsdiv-post_tag', 'post', 'normal'); // Tags in posts
         if (isset($options['excerpts']) == 1)
@@ -847,3 +845,13 @@ License: GPLv2
             add_menu_page(__('Menus'), __('Menus'), 'read', 'nav-menus.php');
 
   }
+
+/*
+* Hide slug editing areas at top and bottom of pages and posts.
+*/
+
+    function hide_all_slugs() {
+        echo '<style type="text/css"> #slugdiv, #edit-slug-box { display: none; }</style>';
+    }
+    add_action( 'admin_head', 'hide_all_slugs'  );
+
