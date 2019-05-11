@@ -853,5 +853,5 @@ License: GPLv2
     function hide_all_slugs() {
         echo '<style type="text/css"> #slugdiv, #edit-slug-box { display: none; }</style>';
     }
-    add_action( 'admin_head', 'hide_all_slugs'  );
+
 
