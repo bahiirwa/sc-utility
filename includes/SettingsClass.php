@@ -135,98 +135,12 @@ class MySettingsPage extends CallbackFunctions {
 
         $new_input = array();
 
-        if(isset($input['email']))
-            $new_input['email'] = sanitize_text_field($input['email']);
+        $new_input_array = array('email','title','phone','image','enable_widget','posts','media','links','pages','comments','appearance','plugins','users','tools','settings','shield','add_widgets','add_menus','attributes','categories','custom_fields','discussion','slug','tags','excerpts','trackbacks','revisions','authors','format','dashboard_widgets','top_admin');
 
-        if(isset($input['title']))
-            $new_input['title'] = sanitize_text_field($input['title']);
-
-        if(isset($input['phone']))
-            $new_input['phone'] = sanitize_text_field($input['phone']);
-
-        if(isset($input['image']))
-            $new_input['image'] = sanitize_text_field($input['image']);
-
-        if(isset($input['enable_widget']))
-            $new_input['enable_widget'] = sanitize_text_field($input['enable_widget']);
-
-        if(isset($input['posts']))
-            $new_input['posts'] = sanitize_text_field($input['posts']);
-
-        if(isset($input['media']))
-            $new_input['media'] = sanitize_text_field($input['media']);
-
-        if(isset($input['links']))
-            $new_input['links'] = sanitize_text_field($input['links']);
-
-        if(isset($input['pages']))
-            $new_input['pages'] = sanitize_text_field($input['pages']);
-
-        if(isset($input['comments']))
-            $new_input['comments'] = sanitize_text_field($input['comments']);
-
-        if(isset($input['appearance']))
-            $new_input['appearance'] = sanitize_text_field($input['appearance']);
-
-        if(isset($input['plugins']))
-            $new_input['plugins'] = sanitize_text_field($input['plugins']);
-
-        if(isset($input['users']))
-            $new_input['users'] = sanitize_text_field($input['users']);
-
-        if(isset($input['tools']))
-            $new_input['tools'] = sanitize_text_field($input['tools']);
-
-        if(isset($input['settings']))
-            $new_input['settings'] = sanitize_text_field($input['settings']);
-
-        if(isset($input['shield']))
-            $new_input['shield'] = sanitize_text_field($input['shield']);        
-
-        if(isset($input['add_widgets']))
-            $new_input['add_widgets'] = sanitize_text_field($input['add_widgets']);
-
-        if(isset($input['add_menus']))
-            $new_input['add_menus'] = sanitize_text_field($input['add_menus']);
-
-        if(isset($input['attributes']))
-            $new_input['attributes'] = sanitize_text_field($input['attributes']);
-
-        if(isset($input['categories']))
-            $new_input['categories'] = sanitize_text_field($input['categories']);
-
-        if(isset($input['custom_fields']))
-            $new_input['custom_fields'] = sanitize_text_field($input['custom_fields']);
-
-        if(isset($input['discussion']))
-            $new_input['discussion'] = sanitize_text_field($input['discussion']);
-
-        if(isset($input['slug']))
-            $new_input['slug'] = sanitize_text_field($input['slug']);
-
-        if(isset($input['tags']))
-            $new_input['tags'] = sanitize_text_field($input['tags']);
-
-        if(isset($input['excerpts']))
-            $new_input['excerpts'] = sanitize_text_field($input['excerpts']);
-
-        if(isset($input['trackbacks']))
-            $new_input['trackbacks'] = sanitize_text_field($input['trackbacks']);
-
-        if(isset($input['revisions']))
-            $new_input['revisions'] = sanitize_text_field($input['revisions']);
-
-        if(isset($input['authors']))
-            $new_input['authors'] = sanitize_text_field($input['authors']);
-
-        if(isset($input['format']))
-            $new_input['format'] = sanitize_text_field($input['format']);
-
-        if(isset($input['dashboard_widgets']))
-            $new_input['dashboard_widgets'] = sanitize_text_field($input['dashboard_widgets']);
-
-        if(isset($input['top_admin']))
-            $new_input['top_admin'] = sanitize_text_field($input['top_admin']);
+        foreach($new_input_array as $new_input_field) {
+            if(isset($input[$new_input_field]))
+                $new_input[$new_input_field] = sanitize_text_field($input[$new_input_field]);
+        }
 
         return $new_input;
 
