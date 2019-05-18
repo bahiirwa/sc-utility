@@ -17,7 +17,13 @@ function sc_custom_dashboard_widget() {
 function sc_custom_dashboard_support() {
 
     $options = get_option('sc_utility_settings');
-    echo '<p><img src="' . $options['image'] . '" style="width:80px;" /></p><p><b>Need help?</b>
+    $image = $options['image'];
+
+    if($image == true ) {
+        echo '<p><img src="' . $image . '" style="width:80px;" /></p>';
+    }
+    
+    echo '<p><b>Need help?</b>
     Contact the developers at ' . $options['title'] . ' by <a href="mailto:' . $options['email'] . '" target=_blank"><u>email</u></a> or phone ' . $options['phone'] . '.<p>';
 
 }

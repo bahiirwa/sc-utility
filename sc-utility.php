@@ -24,6 +24,7 @@ require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/init.php');
 require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/SettingsClass.php');
 require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/DashboardWidgets.php');
 
+return;
 /*
  * Remove items from admin menu.
  */
