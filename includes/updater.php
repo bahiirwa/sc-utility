@@ -1,9 +1,7 @@
 <?php
-/* Load Class. */
-$fxupdater_updater = new fxUpdater_Updater();
 /**
  * Updater Class
-**/
+ */
 class fxUpdater_Updater{
 	/**
 	 * Class Constructor
@@ -191,3 +189,7 @@ class fxUpdater_Updater{
 	}
 }
 
+/**
+ * Load Class.
+ */
+$fxupdater_updater = new fxUpdater_Updater();
