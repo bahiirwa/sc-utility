@@ -1,8 +1,6 @@
 <?php
-/**
- * Check transient, if available display notice
- */
 function sc_admin_notice() {
+    // Check transient, if available display notice
     if(get_transient('sc-admin-notice')){
         ?>
         <div class="updated notice is-dismissible">
