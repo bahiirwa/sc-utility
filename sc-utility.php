@@ -19,13 +19,6 @@ namespace simplycomputing\scutility;
 
 defined('ABSPATH') or die('No direct access allowed!');
 
-require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/updater.php');
-//require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/init.php');
-require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/SettingsClass.php');
-require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/DashboardWidgets.php');
-require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/Menus.php');
-require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/PostTypesOptions.php');
-require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/Metaboxes.php');
 
 /**
  * Start the plugin
@@ -40,6 +33,11 @@ function sc_utility_initialise() {
 
 }
 
+add_action('admin_notices', 'sc_admin_notice');
+
+/**
+ * Check transient, if available display notice
+ */
 function sc_admin_notice() {
     if(get_transient('sc-admin-notice')){
         ?>
@@ -52,4 +50,11 @@ function sc_admin_notice() {
         delete_transient('sc-admin-notice');
     }
 }
-add_action('admin_notices', 'sc_admin_notice');
+
+//require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/init.php');
+require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/updater.php');
+require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/SettingsClass.php');
+require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/DashboardWidgets.php');
+require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/Menus.php');
+require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/PostTypesOptions.php');
+require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/Metaboxes.php');
