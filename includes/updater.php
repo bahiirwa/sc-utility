@@ -193,9 +193,9 @@ if (!class_exists ('fxUpdater_Updater') ) {
 		}
 	}
 
-	/**
-	 * Load Class.
-	 */
 }
+/**
+ * Load Class.
+ */
 
 $fxupdater_updater = new fxUpdater_Updater();
