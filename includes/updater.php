@@ -1,9 +1,11 @@
 <?php
 
+/**
+ * Updater Class
+ */
+
 if (!class_exists ('fxUpdater_Updater') ) {
-	/**
-	 * Updater Class
-	 */
+
 	class fxUpdater_Updater{
 		/**
 		 * Class Constructor
@@ -194,5 +196,6 @@ if (!class_exists ('fxUpdater_Updater') ) {
 	/**
 	 * Load Class.
 	 */
-	$fxupdater_updater = new fxUpdater_Updater();
 }
+
+$fxupdater_updater = new fxUpdater_Updater();
