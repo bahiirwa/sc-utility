@@ -15,10 +15,12 @@
  * text of the license is available at https://www.gnu.org/licenses/gpl-2.0.txt.
 */
 
+namespace simplycomputing\sc_utility;
+
 defined('ABSPATH') or die('No direct access allowed!');
 
 // Start the plugin
-register_activation_hook(__FILE__, 'sc_utility_initialise');
+register_activation_hook(__FILE__, __NAMESPACE__ . '\sc_utility_initialise');
 
 // Set user for the plugin admin.
 function sc_utility_initialise() {
