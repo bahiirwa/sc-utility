@@ -1,20 +1,5 @@
 <?php
 /**
- * Start the plugin
- */
-register_activation_hook(__FILE__, 'sc_utility_initialise');
-
-function sc_utility_initialise() {
-
-    $current_user = wp_get_current_user();
-    update_option('sc_admin_user', $current_user->user_login);
-    set_transient('sc-admin-notice', true, 5);
-
-}
-
-add_action('admin_notices', 'sc_admin_notice');
-
-/**
  * Check transient, if available display notice
  */
 function sc_admin_notice() {
@@ -29,3 +14,4 @@ function sc_admin_notice() {
         delete_transient('sc-admin-notice');
     }
 }
+add_action('admin_notices', 'sc_admin_notice');

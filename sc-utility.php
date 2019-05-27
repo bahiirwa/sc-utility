@@ -20,22 +20,36 @@ namespace simplycomputing\scutility;
 defined('ABSPATH') or die('No direct access allowed!');
 
 require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/updater.php');
-require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/init.php');
+//require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/init.php');
 require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/SettingsClass.php');
 require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/DashboardWidgets.php');
 require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/Menus.php');
 require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/PostTypesOptions.php');
+require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/Metaboxes.php');
 
 /**
- * Unused function - consider deleting
+ * Start the plugin
  */
-function sc_remove_layout_meta_box() {
+register_activation_hook(__FILE__, 'sc_utility_initialise');
 
-    $options = get_option('sc_utility_settings');
+function sc_utility_initialise() {
 
-    if (isset($options['format']) == 1)
-        remove_meta_box('generate_layout_options_meta_box', 'post', 'normal');
+    $current_user = wp_get_current_user();
+    update_option('sc_admin_user', $current_user->user_login);
+    set_transient('sc-admin-notice', true, 5);
 
-    if (isset($options['format']) == 1)
-        remove_meta_box('generate_layout_options_meta_box', 'page', 'normal');
 }
+
+function sc_admin_notice() {
+    if(get_transient('sc-admin-notice')){
+        ?>
+        <div class="updated notice is-dismissible">
+            <p><strong>This plugin is now locked to admin user: <?php echo get_option('sc_admin_user') ?></strong>.</p>
+            <p>Only <?php echo get_option('sc_admin_user') ?> will be able to see the link on the side menu.</p>
+        </div>
+        <?php
+        /* Delete transient, only display this notice once. */
+        delete_transient('sc-admin-notice');
+    }
+}
+add_action('admin_notices', 'sc_admin_notice');
