@@ -7,9 +7,9 @@ mail@simplycomputing.com.au
 
 Written by Alan Coggins
 
-11 May 2019
+27 May 2019
 
-Version 1.0.4
+Version 1.0.5
 
 
 This is a small plugin designed to be used on websites managed by Simply Computing.
@@ -40,6 +40,13 @@ A few more options to hide unnecessary widgets on the main dashboard, and menu i
 
 
 Changelog:
+
+------------
+
+Version 1.0.5
+
+Make plugin updates manageable (change to file structure by Laurence Bahiirwa)
+
 
 ------------
 
