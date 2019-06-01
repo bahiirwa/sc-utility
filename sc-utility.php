@@ -753,7 +753,7 @@ License: GPLv2
  * Remove the layout boxes in GeneratePress theme.
  */
 
-    add_action('admin_menu', 'sc_remove_layout_meta_box');
+    add_action('add_meta_boxes', 'sc_remove_layout_meta_box', 999 );
 
     function sc_remove_layout_meta_box() {
 
@@ -765,7 +765,6 @@ License: GPLv2
         if (isset($options['format']) == 1)
           remove_meta_box('generate_layout_options_meta_box', 'page', 'normal');
     }
-
 
 /*
  * Disable most of the main dashboard widgets.
