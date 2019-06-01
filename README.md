@@ -7,9 +7,9 @@ mail@simplycomputing.com.au
 
 Written by Alan Coggins
 
-27 May 2019
+Jan 2019
 
-Version 1.0.5
+Version 1.0.2
 
 
 This is a small plugin designed to be used on websites managed by Simply Computing.
@@ -40,27 +40,6 @@ A few more options to hide unnecessary widgets on the main dashboard, and menu i
 
 
 Changelog:
-
-------------
-
-Version 1.0.5
-
-Make plugin updates manageable (change to file structure by Laurence Bahiirwa)
-
-
-------------
-
-Version 1.0.4
-
-Fixed issue with hiding slug meta box at bottom of page. The hide slug option now hides both this box and the permalink setting area at the top of the page or post.
-
-
-------------
-
-Version 1.0.3
-
-Added checkbox to hide Shield Security menu item
-
 
 ------------
 

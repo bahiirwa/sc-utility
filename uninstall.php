@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Runs on Uninstall of Simply Computing Utility
  *
@@ -14,4 +15,6 @@ if (!defined('WP_UNINSTALL_PLUGIN')) {
 }
  
 delete_option('sc_utility_settings');
+ 
 delete_option('sc_admin_user');
+ 
