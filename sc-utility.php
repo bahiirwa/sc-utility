@@ -4,7 +4,7 @@ Plugin Name: SC Utility
 Plugin URI: https://github.com/simplycomputing/sc-utility
 Description: Add dashboard support widget, simplify the user interface
 
-Version: 1.0.4
+Version: 1.0.5
 
 Author: Alan Coggins
 Author URI: https://simplycomputing.com.au
@@ -748,6 +748,12 @@ License: GPLv2
             remove_meta_box('formatdiv', 'post', 'normal'); // Format in posts
 
     }
+
+/*
+ * Remove the layout boxes in GeneratePress theme.
+ */
+
+    add_action('admin_menu', 'sc_remove_layout_meta_box');
 
     function sc_remove_layout_meta_box() {
 
