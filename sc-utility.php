@@ -228,6 +228,8 @@ License: GPLv2
 
         add_settings_field('top_admin', 'Hide top admin bar options:', array($this, 'sc_top_admin_callback'), 'sc-utility-settings', 'miscellaneous');
 
+        add_settings_field('revisions_saved', 'Number of revisions to save:', array($this, 'sc_revisions_saved_callback'), 'sc-utility-settings', 'miscellaneous');
+
     }
 
     /**
@@ -332,6 +334,9 @@ License: GPLv2
 
         if(isset($input['top_admin']))
             $new_input['top_admin'] = sanitize_text_field($input['top_admin']);
+
+        if(isset($input['revisions_saved']))
+            $new_input['revisions_saved'] = sanitize_text_field($input['revisions_saved']);          
 
         return $new_input;
 
@@ -617,6 +622,15 @@ License: GPLv2
         echo $html;
     }
 
+    public function sc_revisions_saved_callback() {
+
+        printf(
+
+            '<input type="number" min="0" style="width: 50px;" id="revisions_saved" name="sc_utility_settings[revisions_saved]" value="%s" />',
+
+            isset($this->options['revisions_saved']) ? esc_attr($this->options['revisions_saved']) : '');
+    }    
+
 }
 
    if(is_admin())
@@ -733,7 +747,7 @@ License: GPLv2
         if (isset($options['discussion']) == 1)
             remove_meta_box('commentstatusdiv', 'post', 'normal'); // Discussion in posts
         if (isset($options['slug']) == 1)
-            add_action( 'admin_head', 'hide_all_slugs'  ); // Slugs in posts and pages
+            add_action( 'admin_head', 'sc_hide_all_slugs'  ); // Slugs in posts and pages
         if (isset($options['tags']) == 1)
             remove_meta_box('tagsdiv-post_tag', 'post', 'normal'); // Tags in posts
         if (isset($options['excerpts']) == 1)
@@ -750,7 +764,7 @@ License: GPLv2
     }
 
 /*
- * Remove the layout boxes in GeneratePress theme for pages, posts amd WooCommerce products 
+ * Remove the layout boxes in GeneratePress theme.
  */
 
     add_action('add_meta_boxes', 'sc_remove_layout_meta_box', 999 );
@@ -764,9 +778,6 @@ License: GPLv2
 
         if (isset($options['format']) == 1)
           remove_meta_box('generate_layout_options_meta_box', 'page', 'normal');
-
-        if (isset($options['format']) == 1)
-          remove_meta_box('generate_layout_options_meta_box', 'product', 'normal');
     }
 
 /*
@@ -858,8 +869,25 @@ License: GPLv2
 * Hide slug editing areas at top and bottom of pages and posts.
 */
 
-    function hide_all_slugs() {
+    function sc_hide_all_slugs() {
         echo '<style type="text/css"> #slugdiv, #edit-slug-box { display: none; }</style>';
     }
+
+
+/*
+* Limit number of page and post revisions to save.
+*/
+
+add_filter( 'wp_revisions_to_keep', 'sc_limit_revisions', 10, 2 );
+
+function sc_limit_revisions($num, $post) {
+
+	$options = get_option('sc_utility_settings');
+
+	if (isset($options['revisions_saved']) >= 0) {
+  	$num = $options['revisions_saved']; 
+  	return $num;
+  }
+}
 
 
