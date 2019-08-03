@@ -220,6 +220,8 @@ License: GPLv2
 
         add_settings_field('format', 'Hide formats & layouts:', array($this, 'sc_format_callback'), 'sc-utility-settings', 'setting_section_id2');
 
+        add_settings_field('feat_image', 'Hide featured image:', array($this, 'sc_feat_image_callback'), 'sc-utility-settings', 'setting_section_id2');
+
         // Add section for other miscellaneous actions
 
         add_settings_section('miscellaneous', 'Simplify other areas', '', 'sc-utility-settings');
@@ -336,7 +338,10 @@ License: GPLv2
             $new_input['top_admin'] = sanitize_text_field($input['top_admin']);
 
         if(isset($input['revisions_saved']))
-            $new_input['revisions_saved'] = sanitize_text_field($input['revisions_saved']);          
+            $new_input['revisions_saved'] = sanitize_text_field($input['revisions_saved']);     
+
+        if(isset($input['feat_image']))
+            $new_input['feat_image'] = sanitize_text_field($input['feat_image']);      
 
         return $new_input;
 
@@ -604,6 +609,15 @@ License: GPLv2
         echo $html;
     }
 
+    public function sc_feat_image_callback() {
+
+        $options = get_option('sc_utility_settings');
+        if(!isset($options['feat_image'])) $options['feat_image'] = 0;
+        $html = '<input type="checkbox" id="feat_image" name="sc_utility_settings[feat_image]" value="1"' . checked(1, $options['feat_image'], false) . '/>';
+
+        echo $html;
+    }
+
     public function sc_dashboard_widgets_callback() {
 
         $options = get_option('sc_utility_settings');
@@ -738,6 +752,7 @@ License: GPLv2
         if (isset($options['format']) == 1)
             remove_meta_box('formatdiv', 'page', 'normal'); // Format in pages
 
+
         if (isset($options['custom_fields']) == 1)
             remove_meta_box('postcustom', 'post', 'normal'); // Custom fields in posts
         if (isset($options['comments']) == 1)
@@ -760,11 +775,28 @@ License: GPLv2
             remove_meta_box('authordiv', 'post', 'normal'); // Authors in posts
         if (isset($options['format']) == 1)
             remove_meta_box('formatdiv', 'post', 'normal'); // Format in posts
+    }
+
+
+/*
+ * Remove the featured image boxes.
+ */
+
+    function sc_remove_featured_image_box() {
+
+        $options = get_option('sc_utility_settings');
+
+        if (isset($options['feat_image']) == 1) {
+            remove_meta_box( 'postimagediv','page','side' ); // Featured image in pages
+            remove_meta_box( 'postimagediv','post','side' ); // Featured image in posts
+        }
 
     }
 
+add_action('admin_head','sc_remove_featured_image_box', 999);    
+
 /*
- * Remove the layout boxes in GeneratePress theme.
+ * Remove the layout boxes in Simply Light theme.
  */
 
     add_action('add_meta_boxes', 'sc_remove_layout_meta_box', 999 );
@@ -774,10 +806,11 @@ License: GPLv2
         $options = get_option('sc_utility_settings');
 
         if (isset($options['format']) == 1)
-          remove_meta_box('generate_layout_options_meta_box', 'post', 'normal');
+          remove_meta_box('generate_layout_options_meta_box', 'post', 'side');
 
         if (isset($options['format']) == 1)
-          remove_meta_box('generate_layout_options_meta_box', 'page', 'normal');
+          remove_meta_box('generate_layout_options_meta_box', 'page', 'side');
+
     }
 
 /*
