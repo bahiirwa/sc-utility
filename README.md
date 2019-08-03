@@ -7,9 +7,9 @@ mail@simplycomputing.com.au
 
 Written by Alan Coggins
 
-25 July 2019
+3 August 2019
 
-Version 1.0.6
+Version 1.0.7
 
 
 This is a small plugin designed to be used on websites managed by Simply Computing.
@@ -43,6 +43,12 @@ Changelog:
 
 ------------
 
+Version 1.0.7
+
+Add checkbox to hide featured image box.
+
+------------
+
 Version 1.0.6
 
 Add feature to specify the number of page and post revisions to be saved.
@@ -59,20 +65,17 @@ Version 1.0.4
 
 Fixed issue with hiding slug meta box at bottom of page. The hide slug option now hides both this box and the permalink setting area at the top of the page or post.
 
-
 ------------
 
 Version 1.0.3
 
 Added checkbox to hide Shield Security menu item.
 
-
 ------------
 
 Version 1.0.2
 
 Added in uninstall.php file to clean up database.
-
 
 ------------
 
@@ -83,7 +86,6 @@ Changed the security method to lock usage to the admin user who activates the pl
 Changed function names to make them unique and avoid conflicts.
 
 Added updater file.
-
 
 ------------
 
