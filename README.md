@@ -7,9 +7,9 @@ mail@simplycomputing.com.au
 
 Written by Alan Coggins
 
-3 August 2019
+10 August 2019
 
-Version 1.0.7
+Version 1.0.8
 
 
 This is a small plugin designed to be used on websites managed by Simply Computing.
@@ -40,6 +40,13 @@ A few more options to hide unnecessary widgets on the main dashboard, and menu i
 
 
 Changelog:
+
+------------
+
+Version 1.0.8
+
+Add checkbox to enable custom post type for contact messages.
+Remove checkbox for hiding links from admin menu.
 
 ------------
 

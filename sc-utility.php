@@ -4,7 +4,7 @@ Plugin Name: SC Utility
 Plugin URI: https://github.com/simplycomputing/sc-utility
 Description: Add dashboard support widget, simplify the user interface
 
-Version: 1.0.7
+Version: 1.0.8
 
 Author: Alan Coggins
 Author URI: https://simplycomputing.com.au
@@ -166,8 +166,6 @@ License: GPLv2
 
         add_settings_field('media', 'Hide media:', array($this, 'sc_media_callback'), 'sc-utility-settings', 'setting_section_id');
 
-        add_settings_field('links', 'Hide links:', array($this, 'sc_links_callback'), 'sc-utility-settings', 'setting_section_id');
-
         add_settings_field('pages', 'Hide pages:', array($this, 'sc_pages_callback'), 'sc-utility-settings', 'setting_section_id');
 
         add_settings_field('comments', 'Hide comments:', array($this, 'sc_comments_callback'), 'sc-utility-settings', 'setting_section_id');
@@ -224,13 +222,15 @@ License: GPLv2
 
         // Add section for other miscellaneous actions
 
-        add_settings_section('miscellaneous', 'Simplify other areas', '', 'sc-utility-settings');
+        add_settings_section('miscellaneous', 'Other settings', '', 'sc-utility-settings');
 
         add_settings_field('dashboard_widgets', 'Hide dashboard widgets:', array($this, 'sc_dashboard_widgets_callback'), 'sc-utility-settings', 'miscellaneous');
 
         add_settings_field('top_admin', 'Hide top admin bar options:', array($this, 'sc_top_admin_callback'), 'sc-utility-settings', 'miscellaneous');
 
         add_settings_field('revisions_saved', 'Number of revisions to save:', array($this, 'sc_revisions_saved_callback'), 'sc-utility-settings', 'miscellaneous');
+
+        add_settings_field('messages_saved', 'Save contact messages:', array($this, 'sc_messages_saved_callback'), 'sc-utility-settings', 'miscellaneous');
 
     }
 
@@ -264,9 +264,6 @@ License: GPLv2
 
         if(isset($input['media']))
             $new_input['media'] = sanitize_text_field($input['media']);
-
-        if(isset($input['links']))
-            $new_input['links'] = sanitize_text_field($input['links']);
 
         if(isset($input['pages']))
             $new_input['pages'] = sanitize_text_field($input['pages']);
@@ -338,7 +335,10 @@ License: GPLv2
             $new_input['top_admin'] = sanitize_text_field($input['top_admin']);
 
         if(isset($input['revisions_saved']))
-            $new_input['revisions_saved'] = sanitize_text_field($input['revisions_saved']);     
+            $new_input['revisions_saved'] = sanitize_text_field($input['revisions_saved']); 
+
+        if(isset($input['messages_saved']))
+            $new_input['messages_saved'] = sanitize_text_field($input['messages_saved']);      
 
         if(isset($input['feat_image']))
             $new_input['feat_image'] = sanitize_text_field($input['feat_image']);      
@@ -406,15 +406,6 @@ License: GPLv2
         $options = get_option('sc_utility_settings');
         if(!isset($options['media'])) $options['media'] = 0;
         $html = '<input type="checkbox" id="media" name="sc_utility_settings[media]" value="1"' . checked(1, $options['media'], false) . '/>';
-
-        echo $html;
-    }
-
-    public function sc_links_callback() {
-
-        $options = get_option('sc_utility_settings');
-        if(!isset($options['links'])) $options['links'] = 0;
-        $html = '<input type="checkbox" id="links" name="sc_utility_settings[links]" value="1"' . checked(1, $options['links'], false) . '/>';
 
         echo $html;
     }
@@ -645,6 +636,15 @@ License: GPLv2
             isset($this->options['revisions_saved']) ? esc_attr($this->options['revisions_saved']) : '');
     }    
 
+    public function sc_messages_saved_callback() {
+
+        $options = get_option('sc_utility_settings');
+        if(!isset($options['messages_saved'])) $options['messages_saved'] = 0;
+        $html = '<input type="checkbox" id="messages_saved" name="sc_utility_settings[messages_saved]" value="1"' . checked(1, $options['messages_saved'], false) . '/>';
+
+        echo $html;
+    }      
+
 }
 
    if(is_admin())
@@ -697,8 +697,6 @@ License: GPLv2
             remove_menu_page('themes.php'); // Appearance
         if (isset($options['media']) == 1)
             remove_menu_page('upload.php'); // Media
-        if (isset($options['links']) == 1)
-            remove_menu_page('link-manager.php'); // Links
         if (isset($options['pages']) == 1)
             remove_menu_page('edit.php?post_type=page'); // Pages
         if (isset($options['plugins']) == 1)
@@ -826,6 +824,8 @@ add_action('admin_head','sc_remove_featured_image_box', 999);
         if (isset($options['dashboard_widgets']) == 1)
             remove_meta_box('dashboard_activity', 'dashboard', 'core');
         if (isset($options['dashboard_widgets']) == 1)
+            remove_meta_box('icwp-wpsf-dashboard_widget', 'dashboard', 'core');
+        if (isset($options['dashboard_widgets']) == 1)
             remove_meta_box('dashboard_quick_press', 'dashboard', 'core');
         if (isset($options['dashboard_widgets']) == 1)
             remove_action('welcome_panel', 'wp_welcome_panel');
@@ -835,7 +835,6 @@ add_action('admin_head','sc_remove_featured_image_box', 999);
             remove_meta_box('dashboard_petitions', 'dashboard', 'core');
         if (isset($options['dashboard_widgets']) == 1)
             remove_meta_box('wordfence_activity_report_widget', 'dashboard', 'core');
-
 
 }
 
@@ -922,5 +921,35 @@ function sc_limit_revisions($num, $post) {
   	return $num;
   }
 }
+
+/**
+ * Create a custom post type to store contact messages.
+ */
+
+add_action('init','sc_message_record');
+
+function sc_message_record () {
+
+    $options = get_option('sc_utility_settings');
+
+    if (isset($options['messages_saved']) == 1) {
+
+        register_post_type('messages',
+            array(
+                    'labels' => array('name' => 'Messages'),
+                    'public' => true,
+                    'menu_icon' => 'dashicons-email',
+                    'show_in_menu' => true,
+                    'show_in_nav_menus' => true,
+                )
+            );
+    }
+}
+
+
+
+
+
+
 
 
