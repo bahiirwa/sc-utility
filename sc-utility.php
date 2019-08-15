@@ -941,10 +941,51 @@ function sc_message_record () {
                     'menu_icon' => 'dashicons-email',
                     'show_in_menu' => true,
                     'show_in_nav_menus' => true,
+                    'capability_type' => 'post',
+                    'capabilities' => array(
+                        'create_posts' => 'do_not_allow', // Removes support for the "Add New" function
+                    ),
+                    'map_meta_cap' => true, // Set to false, if users are not allowed to edit/delete existing posts
                 )
             );
     }
 }
+
+
+/**
+ * Add a dashboard widget to show recent messages when storing contact messages.
+ */
+
+add_action('wp_dashboard_setup', 'add_sc_recent_message_display' );
+
+function add_sc_recent_message_display() {
+
+    $options = get_option('sc_utility_settings');
+
+    if (isset($options['messages_saved']) == 1) {    
+
+	  	wp_add_dashboard_widget( 'sc_recent_message_display', __( 'Recent Messages' ), 'sc_recent_message_display' );
+
+	  }
+	}
+
+function sc_recent_message_display() {
+		?>
+		  <ol>
+		    <?php
+		      global $post;
+		      $args = array( 'numberposts' => 10, 'post_type' => array( 'messages' ) );
+		      $myposts = get_posts( $args );
+		        foreach( $myposts as $post ) :  setup_postdata($post); ?>
+		          <li><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></li>
+		        <?php endforeach; ?>
+		  </ol>
+		<?php
+	}
+
+
+
+
 
 
 
