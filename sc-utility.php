@@ -4,7 +4,7 @@ Plugin Name: SC Utility
 Plugin URI: https://github.com/simplycomputing/sc-utility
 Description: Add dashboard support widget, simplify the user interface
 
-Version: 1.0.8
+Version: 1.0.9
 
 Author: Alan Coggins
 Author URI: https://simplycomputing.com.au
@@ -180,16 +180,7 @@ License: GPLv2
 
         add_settings_field('settings', 'Hide settings:', array($this, 'sc_settings_callback'), 'sc-utility-settings', 'setting_section_id');
 
-        add_settings_field('shield', 'Hide Shield Security:', array($this, 'sc_shield_callback'), 'sc-utility-settings', 'setting_section_id');
-
-
-        // Add section to for including back some useful selected menu items from sub menus
-
-        add_settings_section('add_item', 'Add individual menu items from the submenus', '', 'sc-utility-settings');
-
-        add_settings_field('add_widgets', 'Add a widgets link:', array($this, 'sc_add_widgets_callback'), 'sc-utility-settings', 'add_item');
-
-        add_settings_field('add_menus', 'Add a menus link:', array($this, 'sc_add_menus_callback'), 'sc-utility-settings', 'add_item');
+        add_settings_field('shield', 'Hide Shield, etc:', array($this, 'sc_shield_callback'), 'sc-utility-settings', 'setting_section_id');
 
 
         // Add section for settings to simplify pages and posts
@@ -223,6 +214,10 @@ License: GPLv2
         // Add section for other miscellaneous actions
 
         add_settings_section('miscellaneous', 'Other settings', '', 'sc-utility-settings');
+
+        add_settings_field('add_widgets', 'Add a widgets link:', array($this, 'sc_add_widgets_callback'), 'sc-utility-settings', 'add_item');
+
+        add_settings_field('add_menus', 'Add a menus link:', array($this, 'sc_add_menus_callback'), 'sc-utility-settings', 'add_item');
 
         add_settings_field('dashboard_widgets', 'Hide dashboard widgets:', array($this, 'sc_dashboard_widgets_callback'), 'sc-utility-settings', 'miscellaneous');
 
@@ -711,7 +706,7 @@ License: GPLv2
 
 
  /*
- * Hide Shield Security.
+ * Hide Shield Security, and mail logging.
  */
 
     function custom_menu_page_removing() {
@@ -720,6 +715,8 @@ License: GPLv2
         
         if (isset($options['shield']) == 1)
             remove_menu_page( 'icwp-wpsf' );
+        if (isset($options['shield']) == 1)
+            remove_menu_page( 'wpml_plugin_log' );
     }
 
     add_action( 'admin_menu', 'custom_menu_page_removing', 999);
@@ -938,9 +935,11 @@ function sc_message_record () {
             array(
                     'labels' => array('name' => 'Messages'),
                     'public' => true,
+                    'publicly_queryable' => false, // Stops the record from being accessible to the public 
+                    'exclude_from_search' => true, 
                     'menu_icon' => 'dashicons-email',
                     'show_in_menu' => true,
-                    'show_in_nav_menus' => true,
+                    'show_in_nav_menus' => false,
                     'capability_type' => 'post',
                     'capabilities' => array(
                         'create_posts' => 'do_not_allow', // Removes support for the "Add New" function
@@ -970,18 +969,18 @@ function add_sc_recent_message_display() {
 	}
 
 function sc_recent_message_display() {
-		?>
-		  <ol>
-		    <?php
-		      global $post;
-		      $args = array( 'numberposts' => 10, 'post_type' => array( 'messages' ) );
-		      $myposts = get_posts( $args );
-		        foreach( $myposts as $post ) :  setup_postdata($post); ?>
-		          <li><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></li>
-		        <?php endforeach; ?>
-		  </ol>
-		<?php
-	}
+        ?>
+          <ol>
+            <?php
+              global $post;
+              $args = array( 'numberposts' => 10, 'post_type' => array( 'messages' ) );
+              $myposts = get_posts( $args );
+                foreach( $myposts as $post ) :  setup_postdata($post); ?>
+                  <li><?php the_title(); ?></li>
+                <?php endforeach; ?>
+          </ol>
+        <?php
+    }
 
 
 

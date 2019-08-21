@@ -7,9 +7,9 @@ mail@simplycomputing.com.au
 
 Written by Alan Coggins
 
-10 August 2019
+21 August 2019
 
-Version 1.0.8
+Version 1.0.9
 
 
 This is a small plugin designed to be used on websites managed by Simply Computing.
@@ -40,6 +40,14 @@ A few more options to hide unnecessary widgets on the main dashboard, and menu i
 
 
 Changelog:
+
+------------
+
+Version 1.0.9
+
+Add dashboard widget to show last 10 saved contact messages
+Rearrange structur on maain screen
+Combine hiding email log with Shield setting.
 
 ------------
 
