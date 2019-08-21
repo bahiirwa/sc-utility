@@ -215,9 +215,9 @@ License: GPLv2
 
         add_settings_section('miscellaneous', 'Other settings', '', 'sc-utility-settings');
 
-        add_settings_field('add_widgets', 'Add a widgets link:', array($this, 'sc_add_widgets_callback'), 'sc-utility-settings', 'add_item');
+        add_settings_field('add_widgets', 'Add a widgets link:', array($this, 'sc_add_widgets_callback'), 'sc-utility-settings', 'miscellaneous');
 
-        add_settings_field('add_menus', 'Add a menus link:', array($this, 'sc_add_menus_callback'), 'sc-utility-settings', 'add_item');
+        add_settings_field('add_menus', 'Add a menus link:', array($this, 'sc_add_menus_callback'), 'sc-utility-settings', 'miscellaneous');
 
         add_settings_field('dashboard_widgets', 'Hide dashboard widgets:', array($this, 'sc_dashboard_widgets_callback'), 'sc-utility-settings', 'miscellaneous');
 
