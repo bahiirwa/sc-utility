@@ -54,7 +54,7 @@ Add php version and plugin list to the "At a Glance" dasboard widget
 Version 1.0.9
 
 Add dashboard widget to show last 10 saved contact messages
-Rearrange structur on main screen
+Rearrange structure on main screen
 Combine hiding email log with Shield setting.
 
 ------------
