@@ -1009,20 +1009,10 @@ License: GPLv2
 
         $pluginlist = implode('<br>', $plugins);  
         
-        $items = array("</li></ul><hr><p>PHP version: <strong>" . $phpversion ."</strong></p><hr><p>Active plugins: <br>" . $pluginlist ."</p><hr>"); 
+        $items = array("</li></ul><hr><p><strong>PHP version: </strong>" . $phpversion ."</p><hr>
+            <p><strong>Active plugins: </strong><br>" . $pluginlist ."</p><hr>");
 
         return $items; 
 
     };    
-
-
-
-
-
-
-
-
-
-
-
 
