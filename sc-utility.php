@@ -1007,6 +1007,10 @@ License: GPLv2
 
         $plugins = get_option('active_plugins');
 
+            foreach($plugins as $key => &$value) {
+            $value = explode('/',$value)[0]; // Folder name will be displayed
+            }
+
         $pluginlist = implode('<br>', $plugins);  
         
         $items = array("</li></ul><hr><p><strong>PHP version: </strong>" . $phpversion ."</p><hr>
@@ -1014,5 +1018,5 @@ License: GPLv2
 
         return $items; 
 
-    };    
+    }; 
 
