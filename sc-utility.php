@@ -4,7 +4,7 @@ Plugin Name: SC Utility
 Plugin URI: https://github.com/simplycomputing/sc-utility
 Description: Add dashboard support widget, simplify the user interface
 
-Version: 1.0.9
+Version: 1.0.10
 
 Author: Alan Coggins
 Author URI: https://simplycomputing.com.au
@@ -180,7 +180,7 @@ License: GPLv2
 
         add_settings_field('settings', 'Hide settings:', array($this, 'sc_settings_callback'), 'sc-utility-settings', 'setting_section_id');
 
-        add_settings_field('shield', 'Hide Shield, etc:', array($this, 'sc_shield_callback'), 'sc-utility-settings', 'setting_section_id');
+        add_settings_field('shield', 'Hide security:', array($this, 'sc_shield_callback'), 'sc-utility-settings', 'setting_section_id');
 
 
         // Add section for settings to simplify pages and posts
@@ -706,17 +706,17 @@ License: GPLv2
 
 
  /*
- * Hide Shield Security, and mail logging.
+ * Hide Shield Security, and new ClassicPress security menu item.
  */
 
     function custom_menu_page_removing() {
 
         $options = get_option('sc_utility_settings');
         
-        if (isset($options['shield']) == 1)
+        if (isset($options['shield']) == 1) {
             remove_menu_page( 'icwp-wpsf' );
-        if (isset($options['shield']) == 1)
-            remove_menu_page( 'wpml_plugin_log' );
+            remove_menu_page( 'security.php' );
+        }
     }
 
     add_action( 'admin_menu', 'custom_menu_page_removing', 999);
@@ -777,6 +777,8 @@ License: GPLv2
  * Remove the featured image boxes.
  */
 
+    add_action('admin_head','sc_remove_featured_image_box', 999); 
+
     function sc_remove_featured_image_box() {
 
         $options = get_option('sc_utility_settings');
@@ -787,8 +789,7 @@ License: GPLv2
         }
 
     }
-
-add_action('admin_head','sc_remove_featured_image_box', 999);    
+ 
 
 /*
  * Remove the layout boxes in Simply Light theme.
@@ -814,26 +815,24 @@ add_action('admin_head','sc_remove_featured_image_box', 999);
 
     add_action('admin_menu', 'sc_disable_dashboard_widgets');
 
-    function sc_disable_dashboard_widgets() {
+      function sc_disable_dashboard_widgets() {
 
         $options = get_option('sc_utility_settings');
 
-        if (isset($options['dashboard_widgets']) == 1)
-            remove_meta_box('dashboard_activity', 'dashboard', 'core');
-        if (isset($options['dashboard_widgets']) == 1)
-            remove_meta_box('icwp-wpsf-dashboard_widget', 'dashboard', 'core');
-        if (isset($options['dashboard_widgets']) == 1)
-            remove_meta_box('dashboard_quick_press', 'dashboard', 'core');
-        if (isset($options['dashboard_widgets']) == 1)
-            remove_action('welcome_panel', 'wp_welcome_panel');
-        if (isset($options['dashboard_widgets']) == 1)
-            remove_meta_box('dashboard_primary', 'dashboard', 'core');
-        if (isset($options['dashboard_widgets']) == 1)
-            remove_meta_box('dashboard_petitions', 'dashboard', 'core');
-        if (isset($options['dashboard_widgets']) == 1)
-            remove_meta_box('wordfence_activity_report_widget', 'dashboard', 'core');
+        if (isset($options['dashboard_widgets']) == 1) {
 
-}
+            remove_meta_box('dashboard_activity', 'dashboard', 'core');
+            remove_meta_box('icwp-wpsf-dashboard_widget', 'dashboard', 'core');
+            remove_meta_box('dashboard_quick_press', 'dashboard', 'core');
+            remove_action('welcome_panel', 'wp_welcome_panel');
+            remove_meta_box('dashboard_primary', 'dashboard', 'core');
+            remove_meta_box('dashboard_petitions', 'dashboard', 'core');
+            remove_meta_box('wordfence_activity_report_widget', 'dashboard', 'core');
+            add_filter( 'screen_options_show_screen', '__return_false' );
+
+        }
+
+    }
 
 
 /*
@@ -907,80 +906,114 @@ add_action('admin_head','sc_remove_featured_image_box', 999);
 * Limit number of page and post revisions to save.
 */
 
-add_filter( 'wp_revisions_to_keep', 'sc_limit_revisions', 10, 2 );
+    add_filter( 'wp_revisions_to_keep', 'sc_limit_revisions', 10, 2 );
 
-function sc_limit_revisions($num, $post) {
+    function sc_limit_revisions($num, $post) {
 
-	$options = get_option('sc_utility_settings');
+    	$options = get_option('sc_utility_settings');
 
-	if (isset($options['revisions_saved']) >= 0) {
-  	$num = $options['revisions_saved']; 
-  	return $num;
-  }
-}
+    	if (isset($options['revisions_saved']) >= 0) {
+      	$num = $options['revisions_saved']; 
+      	return $num;
+      }
+    }
 
 /**
  * Create a custom post type to store contact messages.
  */
 
-add_action('init','sc_message_record');
+    add_action('init','sc_message_record');
 
-function sc_message_record () {
+    function sc_message_record () {
 
-    $options = get_option('sc_utility_settings');
+        $options = get_option('sc_utility_settings');
 
-    if (isset($options['messages_saved']) == 1) {
+        if (isset($options['messages_saved']) == 1) {
 
-        register_post_type('messages',
-            array(
-                    'labels' => array('name' => 'Messages'),
-                    'public' => true,
-                    'publicly_queryable' => false, // Stops the record from being accessible to the public 
-                    'exclude_from_search' => true, 
-                    'menu_icon' => 'dashicons-email',
-                    'show_in_menu' => true,
-                    'show_in_nav_menus' => false,
-                    'capability_type' => 'post',
-                    'capabilities' => array(
-                        'create_posts' => 'do_not_allow', // Removes support for the "Add New" function
-                    ),
-                    'map_meta_cap' => true, // Set to false, if users are not allowed to edit/delete existing posts
-                )
-            );
+            register_post_type('messages',
+                array(
+                        'labels' => array('name' => 'Messages'),
+                        'public' => true,
+                        'publicly_queryable' => false, // Stops the record from being accessible to the public 
+                        'exclude_from_search' => true, 
+                        'menu_icon' => 'dashicons-email',
+                        'show_in_menu' => true,
+                        'show_in_nav_menus' => false,
+                        'capability_type' => 'post',
+                        'capabilities' => array(
+                            'create_posts' => 'do_not_allow', // Removes support for the "Add New" function
+                        ),
+                        'map_meta_cap' => true, // Set to false, if users are not allowed to edit/delete existing posts
+                    )
+                );
+        }
     }
-}
 
 
 /**
  * Add a dashboard widget to show recent messages when storing contact messages.
  */
 
-add_action('wp_dashboard_setup', 'add_sc_recent_message_display' );
+    add_action('wp_dashboard_setup', 'add_sc_recent_message_display' );
 
-function add_sc_recent_message_display() {
+    function add_sc_recent_message_display() {
 
-    $options = get_option('sc_utility_settings');
+        $options = get_option('sc_utility_settings');
 
-    if (isset($options['messages_saved']) == 1) {    
+        if (isset($options['messages_saved']) == 1) {    
 
-	  	wp_add_dashboard_widget( 'sc_recent_message_display', __( 'Recent Messages' ), 'sc_recent_message_display' );
+    	  	wp_add_dashboard_widget( 'sc_recent_message_display', __( 'Recent Messages' ), 'sc_recent_message_display' );
 
-	  }
-	}
+    	  }
+    	}
 
-function sc_recent_message_display() {
-        ?>
-          <ol>
+    function sc_recent_message_display() {
+            ?>
+              <ol>
+                <?php
+                  global $post;
+                  $args = array( 'numberposts' => 10, 'post_type' => array( 'messages' ) );
+                  $myposts = get_posts( $args );
+                    foreach( $myposts as $post ) :  setup_postdata($post); ?>
+                      <li><?php the_title(); ?></li>
+                    <?php endforeach; ?>
+              </ol>
             <?php
-              global $post;
-              $args = array( 'numberposts' => 10, 'post_type' => array( 'messages' ) );
-              $myposts = get_posts( $args );
-                foreach( $myposts as $post ) :  setup_postdata($post); ?>
-                  <li><?php the_title(); ?></li>
-                <?php endforeach; ?>
-          </ol>
-        <?php
+        }
+
+    
+/**
+* Removes the Help tab in the WP Admin
+*/
+
+    add_filter( 'contextual_help', 'sc_remove_help_tabs', 999, 3 );
+
+    function sc_remove_help_tabs( $old_help, $screen_id, $screen ) {
+
+        $screen->remove_help_tabs();
+        return $old_help;
+
     }
+
+/**
+* Add more useful information to the "At a Glance" widget on the dashboard
+*/   
+
+    add_filter( 'dashboard_glance_items', 'sc_add_dashboard_glance_items', 10, 1 );  
+
+    function sc_add_dashboard_glance_items( $items ) { 
+
+        $phpversion = phpversion();
+
+        $plugins = get_option('active_plugins');
+
+        $pluginlist = implode('<br>', $plugins);  
+        
+        $items = array("</li></ul><hr><p>PHP version: <strong>" . $phpversion ."</strong></p><hr><p>Active plugins: <br>" . $pluginlist ."</p><hr>"); 
+
+        return $items; 
+
+    };    
 
 
 

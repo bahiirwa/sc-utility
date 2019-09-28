@@ -9,7 +9,7 @@ Written by Alan Coggins
 
 21 August 2019
 
-Version 1.0.9
+Version 1.0.10
 
 
 This is a small plugin designed to be used on websites managed by Simply Computing.
@@ -43,10 +43,18 @@ Changelog:
 
 ------------
 
+Version 1.0.10 (28/09/2019)
+
+Change security option to include new ClassicPress security menu item
+Remove hiding of email log
+Add php version and plugin list to the "At a Glance" dasboard widget
+
+------------
+
 Version 1.0.9
 
 Add dashboard widget to show last 10 saved contact messages
-Rearrange structur on maain screen
+Rearrange structur on main screen
 Combine hiding email log with Shield setting.
 
 ------------
