@@ -9,7 +9,7 @@ Written by Alan Coggins
 
 21 August 2019
 
-Version 1.0.10
+Version 1.1.0
 
 
 This is a small plugin designed to be used on websites managed by Simply Computing.
@@ -40,6 +40,13 @@ A few more options to hide unnecessary widgets on the main dashboard, and menu i
 
 
 Changelog:
+
+------------
+
+Version 1.1.0 (19/10/2019)
+
+Rearrange file structure to break up code into separate files in includes folder
+Remove emoji loading code
 
 ------------
 
