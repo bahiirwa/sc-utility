@@ -181,3 +181,10 @@ License: GPLv2
 	remove_action('admin_print_styles', 'print_emoji_styles');
 	add_filter('emoji_svg_url', '__return_false');
 
+/*
+ * Remove remote-access and pingback functionality header links
+ */ 
+
+	remove_action('wp_head', 'rsd_link');
+	remove_action('wp_head', 'wlwmanifest_link');
+

@@ -46,7 +46,8 @@ Changelog:
 Version 1.1.0 (19/10/2019)
 
 Rearrange file structure to break up code into separate files in includes folder
-Remove emoji loading code
+Remove emoji loading code in header
+Remove remote-access and pingback functionality header links
 
 ------------
 
