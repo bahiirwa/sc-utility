@@ -44,6 +44,7 @@ Changelog:
 Version 1.1.1 (19/11/2019)
 
 Add function to check for php error messages and, if found, email them (to admin) then move to archive log. 
+Change files to move from using f(x) Updater to Update Manager to handle plugin updates.
 
 ------------
 
