@@ -9,7 +9,7 @@ Written by Alan Coggins
 
 21 August 2019
 
-Version 1.1.0
+Version 1.1.1
 
 
 This is a small plugin designed to be used on websites managed by Simply Computing.
@@ -40,6 +40,10 @@ A few more options to hide unnecessary widgets on the main dashboard, and menu i
 
 
 Changelog:
+
+Version 1.1.1 (19/11/2019)
+
+Add function to check for php error messages and, if found, email them (to admin) then move to archive log. 
 
 ------------
 

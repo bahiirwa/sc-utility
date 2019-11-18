@@ -4,7 +4,7 @@ Plugin Name: SC Utility
 Plugin URI: https://github.com/simplycomputing/sc-utility
 Description: Modify the dashboard widgets, simplify the user interface.
 
-Version: 1.1.0
+Version: 1.1.1
 
 Author: Alan Coggins
 Author URI: https://simplycomputing.com.au
@@ -27,7 +27,8 @@ License: GPLv2
  */
 
 
-  require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/updater.php');
+// Load the Update Client.
+  require_once('classes/UpdateClient.class.php');
 
   register_activation_hook(__FILE__, 'sc_utility_initialise');
 
@@ -187,4 +188,31 @@ License: GPLv2
 
 	remove_action('wp_head', 'rsd_link');
 	remove_action('wp_head', 'wlwmanifest_link');
+
+/*
+ * Check error log and if there are any php errors email them, then archive the contents.
+*/
+
+  add_action('sc_error_monitor', 'sc_error_monitor');
+
+
+  function sc_error_monitor() {
+
+    $log_file = get_home_path() . 'error_log';
+    $log_archive = get_home_path() . 'error_log.archive';
+    $email_to = get_option('admin_email');
+
+    if (filesize($log_file) == 0) { exit; } // Check the error log filesize
+
+    $sContent = $sFullContent = file_get_contents($log_file); // Get file contents
+
+    file_put_contents($log_file,null); // Truncate the error log so we don't email it again
+
+    wp_mail($email_to, 'PHP error report from '.get_bloginfo(), $sContent); // Email content
+
+    $sFullContent = sprintf("----- Full content of error log as mailed @ %s -----\n%s\n", date('d/m/Y H:i:s'), $sFullContent);
+
+    file_put_contents($log_archive, $sFullContent, FILE_APPEND); // Archive the errors
+
+  }
 
