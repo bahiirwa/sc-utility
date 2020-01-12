@@ -20,7 +20,7 @@ License: GPLv2
 
 */
 
-  defined('ABSPATH') or die('No direct access allowed!');
+	defined('ABSPATH') or die('No direct access allowed!');
 
 /*
  * Include plugin updater.
@@ -28,68 +28,70 @@ License: GPLv2
 
 
 // Load the Update Client.
-  require_once('classes/UpdateClient.class.php');
 
-  register_activation_hook(__FILE__, 'sc_utility_initialise');
+	require_once('classes/UpdateClient.class.php');
 
-  function sc_utility_initialise() {
+	register_activation_hook(__FILE__, 'sc_utility_initialise');
 
-    $current_user = wp_get_current_user();
+	function sc_utility_initialise() {
 
-    update_option('sc_admin_user', $current_user->user_login);
+		$current_user = wp_get_current_user();
 
-    set_transient('sc-admin-notice', true, 5);
+		update_option('sc_admin_user', $current_user->user_login);
 
-  }
+		set_transient('sc-admin-notice', true, 5);
 
-  add_action('admin_notices', 'sc_admin_notice');
+	}
 
-  function sc_admin_notice() {
+	add_action('admin_notices', 'sc_admin_notice');
 
-  /*
-   * Check transient, if available display notice
-   */
+	function sc_admin_notice() {
 
 
-  if(get_transient('sc-admin-notice')){
-    ?>
-    <div class="updated notice is-dismissible">
-      <p><strong>This plugin is now locked to admin user: <?php echo get_option('sc_admin_user') ?></strong>.</p>
-      <p>Only <?php echo get_option('sc_admin_user') ?> will be able to see the link on the side menu.</p>
-    </div>
-    <?php
-    /* Delete transient, only display this notice once. */
-    delete_transient('sc-admin-notice');
-    }
-  }
+	/*
+	 * Check transient, if available display notice
+	 */
+
+
+	if(get_transient('sc-admin-notice')){
+		?>
+		<div class="updated notice is-dismissible">
+			<p><strong>This plugin is now locked to admin user: <?php echo get_option('sc_admin_user') ?></strong>.</p>
+			<p>Only <?php echo get_option('sc_admin_user') ?> will be able to see the link on the side menu.</p>
+		</div>
+		<?php
+		/* Delete transient, only display this notice once. */
+		delete_transient('sc-admin-notice');
+		}
+	}
 
 
 /*
  * Register the settings page for the utility plugin.
  */
 
-  require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/register-settings.php');
+	require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/register-settings.php');
 
 
 /*
  * Add and enhance widgets on the admin dashboard.
  */
 
-  require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/dashboard-widgets.php');
+	require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/dashboard-widgets.php');
 
 
 /*
  * Customise the admin menu.
  */
 
-  require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/admin-menu.php');
+	require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/admin-menu.php');
 
 
 /*
  * Customise pages and posts.
  */
 
-  require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/pages-posts.php');
+	require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/pages-posts.php');
 
 
 
@@ -101,76 +103,76 @@ License: GPLv2
  * Remove links from top admin bar.
  */
 
-  add_action('admin_bar_menu', 'sc_remove_toolbar_nodes', 999);
+	add_action('admin_bar_menu', 'sc_remove_toolbar_nodes', 999);
 
-  function sc_remove_toolbar_nodes($wp_admin_bar) {
+	function sc_remove_toolbar_nodes($wp_admin_bar) {
 
-    global $wp_admin_bar;
+		global $wp_admin_bar;
 
-    $options = get_option('sc_utility_settings');
+		$options = get_option('sc_utility_settings');
 
-    if (isset($options['top_admin']) == 1) {
+		if (isset($options['top_admin']) == 1) {
 
-      $wp_admin_bar->remove_menu('updates');
-      $wp_admin_bar->remove_menu('comments');
-      $wp_admin_bar->remove_menu('new-content');
-      $wp_admin_bar->remove_menu('themes');
-      $wp_admin_bar->remove_menu('widgets');
-      $wp_admin_bar->remove_menu('menus');
-      $wp_admin_bar->remove_menu('customize');
+			$wp_admin_bar->remove_menu('updates');
+			$wp_admin_bar->remove_menu('comments');
+			$wp_admin_bar->remove_menu('new-content');
+			$wp_admin_bar->remove_menu('themes');
+			$wp_admin_bar->remove_menu('widgets');
+			$wp_admin_bar->remove_menu('menus');
+			$wp_admin_bar->remove_menu('customize');
 
-    }
+		}
 
-  }
+	}
 
 
 /*
 * Limit number of revisions to save.
 */
 
-  add_filter( 'wp_revisions_to_keep', 'sc_limit_revisions', 10, 2 );
+	add_filter( 'wp_revisions_to_keep', 'sc_limit_revisions', 10, 2 );
 
-  function sc_limit_revisions($num, $post) {
+	function sc_limit_revisions($num, $post) {
 
-    $options = get_option('sc_utility_settings');
+		$options = get_option('sc_utility_settings');
 
-    if (isset($options['revisions_saved']) >= 0) {
-      $num = $options['revisions_saved']; 
-      return $num;
-    }
-  }
+		if (isset($options['revisions_saved']) >= 0) {
+			$num = $options['revisions_saved']; 
+			return $num;
+		}
+	}
 
 
 /*
  * Create a custom post type to store contact messages.
  */
 
-  add_action('init','sc_message_record');
+	add_action('init','sc_message_record');
 
-  function sc_message_record () {
+	function sc_message_record () {
 
-    $options = get_option('sc_utility_settings');
+		$options = get_option('sc_utility_settings');
 
-    if (isset($options['messages_saved']) == 1) {
+		if (isset($options['messages_saved']) == 1) {
 
-      register_post_type('messages',
-        array(
-        	'labels' => array('name' => 'Messages'),
-          'public' => true,
-          'publicly_queryable' => false, // Stops the record from being accessible to the public 
-          'exclude_from_search' => true, 
-          'menu_icon' => 'dashicons-email',
-          'show_in_menu' => true,
-          'show_in_nav_menus' => false,
-          'capability_type' => 'post',
-          'capabilities' => array(
-            'create_posts' => 'do_not_allow', // Removes support for the "Add New" function
-            ),
-            'map_meta_cap' => true, // Set to false, if users are not allowed to edit/delete existing posts
-            )
-          );
-    }
-  }
+			register_post_type('messages',
+				array(
+					'labels' => array('name' => 'Messages'),
+					'public' => true,
+					'publicly_queryable' => false, // Stops the record from being accessible to the public 
+					'exclude_from_search' => true, 
+					'menu_icon' => 'dashicons-email',
+					'show_in_menu' => true,
+					'show_in_nav_menus' => false,
+					'capability_type' => 'post',
+					'capabilities' => array(
+						'create_posts' => 'do_not_allow', // Removes support for the "Add New" function
+						),
+						'map_meta_cap' => true, // Set to false, if users are not allowed to edit/delete existing posts
+						)
+					);
+		}
+	}
 
 /*
  * Remove emojis
@@ -193,26 +195,26 @@ License: GPLv2
  * Check error log and if there are any php errors email them, then archive the contents.
 */
 
-  add_action('sc_error_monitor', 'sc_error_monitor');
+	add_action('sc_error_monitor', 'sc_error_monitor');
 
 
-  function sc_error_monitor() {
+	function sc_error_monitor() {
 
-    $log_file = get_home_path() . 'error_log';
-    $log_archive = get_home_path() . 'error_log.archive';
-    $email_to = get_option('admin_email');
+		$log_file = ABSPATH . '/error_log';
+		$log_archive = ABSPATH . '/error_log.archive';
+		$email_to = get_option('admin_email');
 
-    if (filesize($log_file) == 0) { exit; } // Check the error log filesize
+		if (filesize($log_file) == 0) { exit; } // Check the error log filesize
 
-    $sContent = $sFullContent = file_get_contents($log_file); // Get file contents
+		$sContent = $sFullContent = file_get_contents($log_file); // Get file contents
 
-    file_put_contents($log_file,null); // Truncate the error log so we don't email it again
+		file_put_contents($log_file,null); // Truncate the error log so we don't email it again
 
-    wp_mail($email_to, 'PHP error report from '.get_bloginfo(), $sContent); // Email content
+		wp_mail($email_to, 'PHP error report from '.get_bloginfo(), $sContent); // Email content
 
-    $sFullContent = sprintf("----- Full content of error log as mailed @ %s -----\n%s\n", date('d/m/Y H:i:s'), $sFullContent);
+		$sFullContent = sprintf("----- Full content of error log as mailed @ %s -----\n%s\n", date('d/m/Y H:i:s'), $sFullContent);
 
-    file_put_contents($log_archive, $sFullContent, FILE_APPEND); // Archive the errors
+		file_put_contents($log_archive, $sFullContent, FILE_APPEND); // Archive the errors
 
-  }
+	}
 
