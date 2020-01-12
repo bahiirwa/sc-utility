@@ -7,9 +7,9 @@ mail@simplycomputing.com.au
 
 Written by Alan Coggins
 
-21 August 2019
+12 January 2020
 
-Version 1.1.1
+Version 1.1.2
 
 
 This is a small plugin designed to be used on websites managed by Simply Computing.
@@ -40,6 +40,13 @@ A few more options to hide unnecessary widgets on the main dashboard, and menu i
 
 
 Changelog:
+
+Version 1.1.2 (12/01/2020)
+
+Fix bug in error monitor finding path to error file.
+Add Wordfence removal to hiding security option.
+
+------------
 
 Version 1.1.1 (19/11/2019)
 

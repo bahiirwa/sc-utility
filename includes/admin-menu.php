@@ -42,6 +42,7 @@
         if (isset($options['shield']) == 1) {
             remove_menu_page( 'icwp-wpsf' );
             remove_menu_page( 'security.php' );
+            remove_menu_page('Wordfence');
         }
     }
 

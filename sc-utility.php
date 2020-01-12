@@ -4,7 +4,7 @@ Plugin Name: SC Utility
 Plugin URI: https://github.com/simplycomputing/sc-utility
 Description: Modify the dashboard widgets, simplify the user interface.
 
-Version: 1.1.1
+Version: 1.1.2
 
 Author: Alan Coggins
 Author URI: https://simplycomputing.com.au
