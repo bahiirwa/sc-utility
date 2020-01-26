@@ -176,16 +176,16 @@
 
         $new_input = array();
 
-        if(isset($input['email']))
+        if(isset($input['email']) && $input['title'] != '')
             $new_input['email'] = sanitize_text_field($input['email']);
 
-        if(isset($input['title']))
+        if(isset($input['title']) && $input['title'] != '')
             $new_input['title'] = sanitize_text_field($input['title']);
 
-        if(isset($input['phone']))
+        if(isset($input['phone']) && $input['phone'] != '')
             $new_input['phone'] = sanitize_text_field($input['phone']);
 
-        if(isset($input['image']))
+        if(isset($input['image']) && $input['image'] != '')
             $new_input['image'] = sanitize_text_field($input['image']);
 
         if(isset($input['enable_widget']))
@@ -251,7 +251,7 @@
         if(isset($input['trackbacks']))
             $new_input['trackbacks'] = sanitize_text_field($input['trackbacks']);
 
-        if(isset($input['revisions']))
+        if(isset($input['revisions']) && $input['revisions'] != '')
             $new_input['revisions'] = sanitize_text_field($input['revisions']);
 
         if(isset($input['authors']))
