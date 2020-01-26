@@ -45,3 +45,15 @@ add_filter('emoji_svg_url', '__return_false');
  */ 
 remove_action('wp_head', 'rsd_link');
 remove_action('wp_head', 'wlwmanifest_link');
+
+/**
+ * Hide admin 'Screen Options' tab
+ * The screen options tab is rendered useless by options to remove items from post and pages 
+ * so we need to hide it.
+ */ 
+add_filter('screen_options_show_screen', 'remove_screen_options_tab');
+
+function remove_screen_options_tab()
+{
+    return false;
+}
