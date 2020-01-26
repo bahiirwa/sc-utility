@@ -55,7 +55,7 @@ public function create_admin_page() {
         <h1>Simply Computing Utility</h1>
         <h4>This page is only available to admin user: <?php echo get_option('sc_admin_user') ?>.</h4>
         <style>
-            .form-table th {padding: 10px 10px 0px 10px;}
+            .form-table th {padding: 10px 10px 0px 10px; width: 250px;}
             .form-table td {padding: 5px 10px 5px 10px;}
             h2 {margin: 25px 0 10px 0;}
         </style>
@@ -160,7 +160,7 @@ public function create_admin_page() {
 
         add_settings_field('top_admin', 'Hide top admin bar options:', array($this, 'sc_top_admin_callback'), 'sc-utility-settings', 'miscellaneous');
 
-        add_settings_field('screen_options', 'Hide Screen options:', array($this, 'sc_screen_options_callback'), 'sc-utility-settings', 'miscellaneous');
+        add_settings_field('screen_options', 'Hide Page/Post Screen options:', array($this, 'sc_screen_options_callback'), 'sc-utility-settings', 'miscellaneous');
 
         add_settings_field('revisions_saved', 'Number of revisions to save:', array($this, 'sc_revisions_saved_callback'), 'sc-utility-settings', 'miscellaneous');
 
