@@ -176,16 +176,16 @@
 
         $new_input = array();
 
-        if(isset($input['email']))
+        if(isset($input['email']) && $input['title'] != '')
             $new_input['email'] = sanitize_text_field($input['email']);
 
-        if(isset($input['title']))
+        if(isset($input['title']) && $input['title'] != '')
             $new_input['title'] = sanitize_text_field($input['title']);
 
-        if(isset($input['phone']))
+        if(isset($input['phone']) && $input['title'] != '')
             $new_input['phone'] = sanitize_text_field($input['phone']);
 
-        if(isset($input['image']))
+        if(isset($input['image']) && $input['title'] != '')
             $new_input['image'] = sanitize_text_field($input['image']);
 
         if(isset($input['enable_widget']))
