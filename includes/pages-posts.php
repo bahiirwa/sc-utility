@@ -51,50 +51,35 @@
     }
 
 
-/*
+/**
  * Remove the featured image boxes.
  */
+add_action('admin_head','sc_remove_featured_image_box', 999); 
 
-    add_action('admin_head','sc_remove_featured_image_box', 999); 
-
-    function sc_remove_featured_image_box() {
-
-        $options = get_option('sc_utility_settings');
-
-        if (isset($options['feat_image']) == 1) {
-            remove_meta_box( 'postimagediv','page','side' ); // Featured image in pages
-            remove_meta_box( 'postimagediv','post','side' ); // Featured image in posts
-        }
-
+function sc_remove_featured_image_box() {
+    $options = get_option('sc_utility_settings');
+    if (isset($options['feat_image']) == 1) {
+        remove_meta_box( 'postimagediv','page','side' ); // Featured image in pages
+        remove_meta_box( 'postimagediv','post','side' ); // Featured image in posts
     }
- 
+}
 
-/*
+/**
  * Remove the layout boxes in Simply Light theme.
  */
+add_action('add_meta_boxes', 'sc_remove_layout_meta_box', 999 );
 
-    add_action('add_meta_boxes', 'sc_remove_layout_meta_box', 999 );
-
-    function sc_remove_layout_meta_box() {
-
-        $options = get_option('sc_utility_settings');
-
-        if (isset($options['format']) == 1)
-          remove_meta_box('generate_layout_options_meta_box', 'post', 'side');
-
-        if (isset($options['format']) == 1)
-          remove_meta_box('generate_layout_options_meta_box', 'page', 'side');
-
+function sc_remove_layout_meta_box() {
+    $options = get_option('sc_utility_settings');
+    if (isset($options['format']) == 1) {
+        remove_meta_box('generate_layout_options_meta_box', 'post', 'side');
+        remove_meta_box('generate_layout_options_meta_box', 'page', 'side');
     }
+}
 
-
-/*
-* Hide slug editing areas at top and bottom of pages and posts.
-*/
-
-    function sc_hide_all_slugs() {
-        echo '<style type="text/css"> #slugdiv, #edit-slug-box { display: none; }</style>';
-    }
-
-
-
+/**
+ * Hide slug editing areas at top and bottom of pages and posts.
+ */
+function sc_hide_all_slugs() {
+    echo '<style type="text/css"> #slugdiv, #edit-slug-box { display: none; }</style>';
+}
