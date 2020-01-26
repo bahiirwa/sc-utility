@@ -251,7 +251,7 @@
         if(isset($input['trackbacks']))
             $new_input['trackbacks'] = sanitize_text_field($input['trackbacks']);
 
-        if(isset($input['revisions']))
+        if(isset($input['revisions']) && $input['revisions'] != '')
             $new_input['revisions'] = sanitize_text_field($input['revisions']);
 
         if(isset($input['authors']))
