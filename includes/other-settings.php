@@ -49,7 +49,7 @@ remove_action('wp_head', 'wlwmanifest_link');
 /**
  * Hide admin 'Screen Options' tab
  * The screen options tab is rendered useless by options to remove items from post and pages 
- * so we need to hide it.
+ * so we need to hide it to avoid confusion.
  */ 
 add_action( 'current_screen', 'this_screen' );
 
