@@ -36,7 +36,7 @@ require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/admin-menu.p
 // Customise pages and posts.
 require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/pages-posts.php');
 
-// Customise pages and posts.
+// functions related with admin emails
 require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/admin-emails.php');
 
 // Other miscellaneous settings 

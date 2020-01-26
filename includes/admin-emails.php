@@ -1,6 +1,5 @@
 <?php
 /**
- * This file contains functions related with admin emails
  * Custom post type for Store contact messages
  * Error log - if there are any php errors email them -> archive the contents.
  */

@@ -182,10 +182,10 @@
         if(isset($input['title']) && $input['title'] != '')
             $new_input['title'] = sanitize_text_field($input['title']);
 
-        if(isset($input['phone']) && $input['title'] != '')
+        if(isset($input['phone']) && $input['phone'] != '')
             $new_input['phone'] = sanitize_text_field($input['phone']);
 
-        if(isset($input['image']) && $input['title'] != '')
+        if(isset($input['image']) && $input['image'] != '')
             $new_input['image'] = sanitize_text_field($input['image']);
 
         if(isset($input['enable_widget']))
