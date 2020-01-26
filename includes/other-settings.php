@@ -51,9 +51,13 @@ remove_action('wp_head', 'wlwmanifest_link');
  * The screen options tab is rendered useless by options to remove items from post and pages 
  * so we need to hide it.
  */ 
+
 add_filter('screen_options_show_screen', 'remove_screen_options_tab');
 
-function remove_screen_options_tab()
-{
-    return false;
+function remove_screen_options_tab() {
+	$options = get_option('sc_utility_settings');
+	if (isset($options['screen_options']) == 1) {
+		return false;
+	}
+	// return false;
 }
