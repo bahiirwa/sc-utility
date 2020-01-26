@@ -1,76 +1,76 @@
 <?php
 
-  class MySettingsPage {
+class MySettingsPage {
 
-    /**
-     * Holds the values to be used in the fields callbacks
-     */
+/**
+ * Holds the values to be used in the fields callbacks
+ */
 
-    private $options;
+private $options;
 
-    /**
-     * Start up
-     */
+/**
+ * Start up
+ */
 
-    public function __construct() {
+public function __construct() {
 
-        add_action('admin_menu', array($this, 'add_plugin_page'));
-        add_action('admin_init', array($this, 'page_init'));
+    add_action('admin_menu', array($this, 'add_plugin_page'));
+    add_action('admin_init', array($this, 'page_init'));
 
-    }
+}
 
-    /**
-     * Add options page
-     */
+/**
+ * Add options page
+ */
 
-    public function add_plugin_page() {
+public function add_plugin_page() {
 
-        $current_user = wp_get_current_user();
+    $current_user = wp_get_current_user();
 
-        $admin_user = get_option('sc_admin_user');
+    $admin_user = get_option('sc_admin_user');
 
-        // If you get locked out, comment out this 'if' statement to remove the admin security check
+    // If you get locked out, comment out this 'if' statement to remove the admin security check
 
-        if ($current_user->user_login === $admin_user) {
+    if ($current_user->user_login === $admin_user) {
 
-            add_menu_page('Settings Admin', 'SC Utility', 'manage_options', 'sc-utility-settings', array($this, 'create_admin_page'), 'dashicons-admin-tools');
-
-        }
+        add_menu_page('Settings Admin', 'SC Utility', 'manage_options', 'sc-utility-settings', array($this, 'create_admin_page'), 'dashicons-admin-tools');
 
     }
 
-    /**
-     * Options page callback
-     */
+}
 
-    public function create_admin_page() {
+/**
+ * Options page callback
+ */
 
-        // Set class property
+public function create_admin_page() {
 
-        $this->options = get_option('sc_utility_settings');
+    // Set class property
 
+    $this->options = get_option('sc_utility_settings');
+
+    ?>
+
+    <div class="wrap">
+        <h1>Simply Computing Utility</h1>
+        <h4>This page is only available to admin user: <?php echo get_option('sc_admin_user') ?>.</h4>
+        <style>
+            .form-table th {padding: 10px 10px 0px 10px;}
+            .form-table td {padding: 5px 10px 5px 10px;}
+            h2 {margin: 25px 0 10px 0;}
+        </style>
+        <form method="post" action="options.php">
+        <?php
+            // This prints out all hidden setting fields
+            submit_button();
+            settings_fields('utility_settings_group');
+            do_settings_sections('sc-utility-settings');
+            submit_button();
         ?>
-
-        <div class="wrap">
-            <h1>Simply Computing Utility</h1>
-            <h4>This page is only available to admin user: <?php echo get_option('sc_admin_user') ?>.</h4>
-            <style>
-                .form-table th {padding: 10px 10px 0px 10px;}
-                .form-table td {padding: 5px 10px 5px 10px;}
-                h2 {margin: 25px 0 10px 0;}
-            </style>
-            <form method="post" action="options.php">
-            <?php
-                // This prints out all hidden setting fields
-                submit_button();
-                settings_fields('utility_settings_group');
-                do_settings_sections('sc-utility-settings');
-                submit_button();
-            ?>
-            </form>
-        </div>
+        </form>
+    </div>
 <?php
-    }
+}
 
     /**
      * Register and add settings
@@ -159,6 +159,8 @@
         add_settings_section('miscellaneous', 'Other settings', '', 'sc-utility-settings');
 
         add_settings_field('top_admin', 'Hide top admin bar options:', array($this, 'sc_top_admin_callback'), 'sc-utility-settings', 'miscellaneous');
+
+        add_settings_field('screen_options', 'Hide Screen options:', array($this, 'sc_screen_options_callback'), 'sc-utility-settings', 'miscellaneous');
 
         add_settings_field('revisions_saved', 'Number of revisions to save:', array($this, 'sc_revisions_saved_callback'), 'sc-utility-settings', 'miscellaneous');
 
@@ -266,6 +268,9 @@
         if(isset($input['top_admin']))
             $new_input['top_admin'] = sanitize_text_field($input['top_admin']);
 
+        if(isset($input['screen_options']))
+            $new_input['screen_options'] = sanitize_text_field($input['screen_options']);
+
         if(isset($input['revisions_saved']))
             $new_input['revisions_saved'] = sanitize_text_field($input['revisions_saved']); 
 
@@ -282,37 +287,20 @@
     /**
      * Get the settings option array and print values
      */
-
     public function sc_email_callback() {
-        printf(
-
-            '<input type="text" id="email" name="sc_utility_settings[email]" value="%s" size="40" />',
-
-            isset($this->options['email']) ? esc_attr($this->options['email']) : '');
+        printf('<input type="text" id="email" name="sc_utility_settings[email]" value="%s" size="40" />', isset($this->options['email']) ? esc_attr($this->options['email']) : '');
     }
 
     public function sc_title_callback() {
-        printf(
-
-            '<input type="text" id="title" name="sc_utility_settings[title]" value="%s" />',
-
-            isset($this->options['title']) ? esc_attr($this->options['title']) : '');
+        printf('<input type="text" id="title" name="sc_utility_settings[title]" value="%s" />', isset($this->options['title']) ? esc_attr($this->options['title']) : '');
     }
 
     public function sc_phone_callback() {
-        printf(
-
-            '<input type="text" id="phone" name="sc_utility_settings[phone]" value="%s" />',
-
-            isset($this->options['phone']) ? esc_attr($this->options['phone']) : '');
+        printf('<input type="text" id="phone" name="sc_utility_settings[phone]" value="%s" />', isset($this->options['phone']) ? esc_attr($this->options['phone']) : '');
     }
 
     public function sc_image_callback() {
-        printf(
-
-            '<input type="text" id="image" name="sc_utility_settings[image]" value="%s" />',
-
-            isset($this->options['image']) ? esc_attr($this->options['image']) : '');
+        printf('<input type="text" id="image" name="sc_utility_settings[image]" value="%s" />', isset($this->options['image']) ? esc_attr($this->options['image']) : '');
     }
 
     public function sc_enable_widget_callback() {
@@ -559,13 +547,17 @@
         echo $html;
     }
 
+    public function sc_screen_options_callback() {
+
+        $options = get_option('sc_utility_settings');
+        if(!isset($options['screen_options'])) $options['screen_options'] = 0;
+        $html = '<input type="checkbox" id="screen_options" name="sc_utility_settings[screen_options]" value="1"' . checked(1, $options['screen_options'], false) . '/>';
+
+        echo $html;
+    }
+
     public function sc_revisions_saved_callback() {
-
-        printf(
-
-            '<input type="number" min="0" style="width: 50px;" id="revisions_saved" name="sc_utility_settings[revisions_saved]" value="%s" />',
-
-            isset($this->options['revisions_saved']) ? esc_attr($this->options['revisions_saved']) : '');
+        printf( '<input type="number" min="0" style="width: 50px;" id="revisions_saved" name="sc_utility_settings[revisions_saved]" value="%s" />', isset($this->options['revisions_saved']) ? esc_attr($this->options['revisions_saved']) : '');
     }    
 
     public function sc_messages_saved_callback() {
@@ -579,5 +571,6 @@
 
 }
 
-   if(is_admin())
-   $my_settings_page = new MySettingsPage();
+if(is_admin()) {
+    $my_settings_page = new MySettingsPage();
+}
