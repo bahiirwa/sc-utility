@@ -3,29 +3,35 @@
 /*
  * Add a dashboard widget giving contact details for support.
  */
+add_action('wp_dashboard_setup', 'sc_custom_dashboard_widget');
 
-    add_action('wp_dashboard_setup', 'sc_custom_dashboard_widget');
-
-    function sc_custom_dashboard_widget() {
-
+function sc_custom_dashboard_widget() {
     global $wp_meta_boxes;
-
     $options = get_option('sc_utility_settings');
-
-    if (isset($options['enable_widget']) == 1)
+    if (isset($options['enable_widget']) == 1) {
         wp_add_dashboard_widget('custom_help_widget', $options['title'] . ' Support', 'sc_custom_dashboard_support');
+	}
+}
 
-  }
+function sc_custom_dashboard_support() {
+	$options = get_option('sc_utility_settings');
 
-  function sc_custom_dashboard_support() {
+	// Check if the image is set and not empty, then add the image code.
+	$dash_image = $options['image'];
+	if ( isset($dash_image) && $dash_image != '' ) {
+		echo '<p><img src="' . esc_url($dash_image) . '" style="width:80px;" /></p>';
+	}
 
-    $options = get_option('sc_utility_settings');
-
-    echo '<p><img src="' . $options['image'] . '" style="width:80px;" /></p><p><b>Need help?</b>
-   Contact the developers at ' . $options['title'] . ' by <a href="mailto:' . $options['email'] . '" target=_blank"><u>email</u></a>
-   or phone ' . $options['phone'] . '.<p>';
-
-  }
+	// Check if title settings are set and not empty
+	$title = (isset($options['title']) && $options['title'] != '') ? ' at ' . $options['title'] : '';
+	echo '<p><b>Need help?</b> Contact the developers'  . $title . '<p>';
+	
+	// Check if email settings are set and not empty
+	echo (isset($options['email']) && $options['email'] != '') ? '<p>Email: <a href="mailto:' . $options['email'] . ' target=_blank"><u>' . $options['email'] . '</u></a></p>' : '';
+	
+	// Check if phone settings are set and not empty
+	echo (isset($options['phone']) && $options['phone'] != '') ? '<p>Phone: ' . $options['phone'] . '</p>' : '';
+}
 
 
  /**
