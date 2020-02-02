@@ -197,7 +197,7 @@ class MySettingsPage {
         if(isset($input['revisions_saved'])) { $new_input['revisions_saved'] = sanitize_text_field($input['revisions_saved']);  }
         if(isset($input['messages_saved'])) { $new_input['messages_saved'] = sanitize_text_field($input['messages_saved']);       }
         if(isset($input['feat_image'])) { $new_input['feat_image'] = sanitize_text_field($input['feat_image']);       }
-        
+
         return $new_input;
 
     }
