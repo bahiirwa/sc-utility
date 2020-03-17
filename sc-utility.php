@@ -42,6 +42,15 @@ require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/admin-emails
 // Other miscellaneous settings 
 require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/other-settings.php');
 
+// Other miscellaneous settings 
+require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/tab-dashboard-options.php');
+require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/tab-admin-menu.php');
+require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/tab-admin_menu.php');
+require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/tab-render-admin.php');
+require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/tab-sections-callbacks.php');
+require_once(trailingslashit(plugin_dir_path(__FILE__)) . 'includes/tab-simplify_posts_pages.php');
+
+
 /**
  * Run sc_utility_initialise() on plugin install.
  */
